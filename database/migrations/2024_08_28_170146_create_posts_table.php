@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('title', 30);
-            $table->string('body', 300);
+            $table->string('body', 3000);
             $table->timestamps();
             $table->softDeletes();
         });
