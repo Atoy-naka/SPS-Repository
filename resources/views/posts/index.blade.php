@@ -1,3 +1,7 @@
+<x-app-layout>
+    <x-slot name="header">
+        　HOME
+    </x-slot>
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -39,3 +43,4 @@
     　　</script>
     </body>
 </html>
+</x-app-layout>
