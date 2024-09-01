@@ -1,3 +1,7 @@
+<x-app-layout>
+    <x-slot name="header">
+        　POST
+    </x-slot>
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -35,3 +39,4 @@
         </div>
     </body>
 </html>
+</x-app-layout>

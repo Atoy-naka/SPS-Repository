@@ -1,3 +1,7 @@
+<x-app-layout>
+    <x-slot name="header">
+        　HOME
+    </x-slot>
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -25,6 +29,7 @@
                 </div>
             @endforeach
         </div>
+        ログインユーザー：{{ Auth::user()->name }}
         <div class='paginate'>
             {{ $posts->links() }}
         </div>
@@ -39,3 +44,4 @@
     　　</script>
     </body>
 </html>
+</x-app-layout>

@@ -1,3 +1,7 @@
+<x-app-layout>
+    <x-slot name="header">
+        　投稿を編集
+    </x-slot>
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -21,3 +25,4 @@
         </form>
     </body>
 </html>
+</x-app-layout>
