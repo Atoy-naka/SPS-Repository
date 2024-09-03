@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        投稿の詳細
-    </x-slot>
 <!DOCTYPE HTML>
 <html lang="ja">
     <head>
