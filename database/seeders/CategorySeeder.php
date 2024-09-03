@@ -27,6 +27,24 @@ class CategorySeeder extends Seeder
             [
                 'name' => '里親募集'    
             ],
+            [
+                'name' => '犬'
+            ],
+            [
+                'name' => '猫'    
+            ],
+            [
+                'name' => '小動物'
+            ],
+            [
+                'name' => '鳥'    
+            ],
+            [
+                'name' => '魚'
+            ],
+            [
+                'name' => '爬虫類'    
+            ],
         ];
         
         foreach ($params as $param) {
