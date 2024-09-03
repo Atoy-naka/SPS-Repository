@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 
@@ -50,5 +52,24 @@ class PostController extends Controller
         return redirect('/');
     }
     
-    
+    //検索機能を実装するメソッド
+    public function search(Request $request)
+    {
+        // 検索ボックスに入力されたキーワードを取得
+        $keyword = $request->input('keyword'); 
+        
+        // キーワードが入力されている場合、タイトルまたは本文に部分一致する投稿を検索
+        if ($keyword) {
+            $posts = Post::where('title', 'LIKE', "%{$keyword}%")
+                         ->orWhere('body', 'LIKE', "%{$keyword}%")
+                         ->paginate(10); // ページネーションを設定
+        } else {
+            // キーワードが入力されていない場合、空のコレクションを返す
+            $posts = collect(); // 空のコレクションを設定
+        }
+        
+        //検索結果をビューに渡す
+        return view('posts.search', compact('posts'));
+    }
 }
+    
