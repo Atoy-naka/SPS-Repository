@@ -71,7 +71,7 @@ class PostController extends Controller
         //検索結果をビューに渡す
         return view('posts.search', compact('posts'));
     }
-    
+
     // 検索した投稿の詳細画面を表示するメソッド
     public function searchshow(Post $post)
     {
