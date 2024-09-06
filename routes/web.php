@@ -34,7 +34,6 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
     Route::get('/posts/{post}/edit', 'edit')->name('edit');
     Route::get('/search', 'search')->name('search');
     Route::get('/posts/{post}', 'searchshow')->name('searchshow');
-
 });
 
  Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
