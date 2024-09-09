@@ -69,13 +69,13 @@ class PostController extends Controller
         }
         
         //検索結果をビューに渡す
-        return view('posts.search', compact('posts'));
+        return view('searches.search', compact('posts'));
     }
 
     // 検索した投稿の詳細画面を表示するメソッド
     public function searchshow(Post $post)
     {
-        return view('posts.searchshow')->with(['post' => $post]);
+        return view('searches.searchshow')->with(['post' => $post]);
     }
 }
     
