@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo_path',
+        'prefecture', //都道府県
+        'city', //市
+        'district', //区町村
     ];
 
     /**
@@ -42,24 +46,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];    
-    
-    /*
-    *フォローされているユーザーを取得
-    */
-     
-   
-    
-    /*
-    *フォローしているユーザーを取得
-    */
-    
-    public function follow()
-    {
-        return $this->belongsToMany(
-            'App\Model\User',
-            'follow_users',
-            'following_id',
-            'followed__id'
-                );
-        }
-    }
+}

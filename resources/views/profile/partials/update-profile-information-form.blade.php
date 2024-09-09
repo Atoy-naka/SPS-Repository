@@ -13,9 +13,15 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+        
+        <!-- アイコン画像変更 -->
+        <div>
+           <x-picture-input />
+           <x-input-error class="mt-2" :messages="$errors->get('picture')" />
+       </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -45,6 +51,25 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- 位置情報の追加 -->
+        <div>
+            <x-input-label for="prefecture" :value="__('Prefecture')" />
+            <x-text-input id="prefecture" name="prefecture" type="text" class="mt-1 block w-full" :value="old('prefecture', $user->prefecture)" autocomplete="prefecture" />
+            <x-input-error class="mt-2" :messages="$errors->get('prefecture')" />
+        </div>
+        
+        <div>
+            <x-input-label for="city" :value="__('City')" />
+            <x-text-input id="city" name="city" type="text" class="mt-1 block w-full" :value="old('city', $user->city)" autocomplete="city" />
+            <x-input-error class="mt-2" :messages="$errors->get('city')" />
+        </div>
+        
+        <div>
+            <x-input-label for="district" :value="__('District')" />
+            <x-text-input id="district" name="district" type="text" class="mt-1 block w-full" :value="old('district', $user->district)" autocomplete="district" />
+            <x-input-error class="mt-2" :messages="$errors->get('district')" />
         </div>
 
         <div class="flex items-center gap-4">
