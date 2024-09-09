@@ -32,6 +32,7 @@ class ProfileController extends Controller
             'prefecture' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'district' => 'nullable|string|max:255',
+            'bio' => 'nullable|string|max:1000',
         ]);
     
         $user = Auth::user();
@@ -40,7 +41,9 @@ class ProfileController extends Controller
         $user->prefecture = $request->prefecture;
         $user->city = $request->city;
         $user->district = $request->district;
+        $user->bio = $request->bio; // 自己紹介文を保存
         $user->save();
+
     
         return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
