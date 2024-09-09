@@ -25,6 +25,7 @@ class User extends Authenticatable
         'prefecture', //都道府県
         'city', //市
         'district', //区町村
+        'bio', //自己紹介文
     ];
 
     /**
