@@ -41,11 +41,10 @@ class ProfileController extends Controller
         $user->prefecture = $request->prefecture;
         $user->city = $request->city;
         $user->district = $request->district;
-        $user->bio = $request->bio; // 自己紹介文を保存
+        $user->bio = $request->bio;
         $user->save();
-
     
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profileoption')->with('status', 'profile-updated');
     }
 
     /**

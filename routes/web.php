@@ -36,8 +36,24 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
     Route::get('/posts/{post}', 'searchshow')->name('searchshow');
 });
 
- Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
+Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
 
+// プロフィール表示画面
+Route::get('/profile/show', function () {
+    return view('profiles.profileshow');
+})->name('profileoption');
+
+
+
+// プロフィール編集画面
+Route::get('/profile/edit', function () {
+    return view('profiles.profileedit');
+})->name('profile.edit');
+
+// プロフィール情報の更新
+Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+// 認証が必要なルート
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

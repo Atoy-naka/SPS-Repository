@@ -9,11 +9,7 @@
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form id="update-profile-form" method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -80,17 +76,42 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button id="save-button">{{ __('Save') }}</x-primary-button>
 
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
+            <p id="saved-message" style="display: none;" class="text-sm text-gray-600">{{ __('Saved.') }}</p>
+
+            <!-- プロフィール表示画面へのボタン -->
+            <a href="{{ route('profileoption') }}" class="btn btn-secondary">
+                {{ __('プロフィールへ') }}
+            </a>
         </div>
     </form>
 </section>
+
+<script>
+    document.getElementById('save-button').addEventListener('click', function(event) {
+        event.preventDefault(); // デフォルトのフォーム送信を防ぐ
+
+        // フォームデータを取得
+        var formData = new FormData(document.getElementById('update-profile-form'));
+
+        // 非同期でフォームデータを送信
+        fetch('{{ route('profile.update') }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // 成功メッセージを表示
+                document.getElementById('saved-message').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('saved-message').style.display = 'none';
+                }, 2000);
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
