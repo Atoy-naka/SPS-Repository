@@ -24,7 +24,6 @@
                     <x-nav-link :href="route('profileoption')" :active="request()->routeIs('profileoption')">
                         {{ __('Profile') }}
                     </x-nav-link>
-
                 </div>
             </div>
 
