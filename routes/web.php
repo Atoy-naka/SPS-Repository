@@ -33,7 +33,7 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
     Route::delete('/posts/{post}', 'delete')->name('delete');
     Route::get('/posts/{post}/edit', 'edit')->name('edit');
     Route::get('/search', 'search')->name('search');
-    Route::get('/posts/{post}', 'searchshow')->name('searchshow');
+    Route::get('/posts/search/{post}', 'searchshow')->name('searchshow');
 });
 
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
