@@ -13,7 +13,7 @@
         <h1>{{ $post->title }}</h1>
         <p>{{ $post->body }}</p>
         <div class="footer">
-            <a <a href="{{ url()->previous() }}">戻る</a>
+            <a <a href="{{ url()->previous() }}">back</a>
         </div>
     </body>
 </html>
