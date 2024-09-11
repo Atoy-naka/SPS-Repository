@@ -33,6 +33,8 @@ class ProfileController extends Controller
             'city' => 'nullable|string|max:255',
             'district' => 'nullable|string|max:255',
             'bio' => 'nullable|string|max:1000',
+            'pet' => 'nullable|string|max:255',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
     
         $user = Auth::user();
@@ -42,6 +44,14 @@ class ProfileController extends Controller
         $user->city = $request->city;
         $user->district = $request->district;
         $user->bio = $request->bio;
+        $user->pet = $request->pet;
+    
+        // アイコン画像の保存処理
+        if ($request->hasFile('picture')) {
+            $path = $request->file('picture')->store('profile_pictures', 'public');
+            $user->profile_photo_path = $path;
+        }
+    
         $user->save();
     
         return redirect()->route('profileoption')->with('status', 'profile-updated');
