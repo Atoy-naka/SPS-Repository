@@ -77,6 +77,13 @@
             <x-input-error class="mt-2" :messages="$errors->get('bio')" />
         </div>
 
+        <!-- ペットの追加 -->
+        <div>
+            <x-input-label for="pet" :value="__('Pet')" />
+            <x-text-input id="pet" name="pet" type="text" class="mt-1 block w-full" :value="old('pet', $user->pet)" autocomplete="pet" />
+            <x-input-error class="mt-2" :messages="$errors->get('pet')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button id="save-button">{{ __('Save') }}</x-primary-button>
 
