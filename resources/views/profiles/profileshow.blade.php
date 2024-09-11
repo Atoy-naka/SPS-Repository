@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="profile-header p-6">
-                    <img src="{{ Auth::user()->profile_photo_url }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                    <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
                     <h2>{{ Auth::user()->name }}</h2>
                     <p>{{ Auth::user()->bio }}</p>
                 </div>

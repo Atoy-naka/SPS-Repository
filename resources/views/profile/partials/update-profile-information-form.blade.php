@@ -15,7 +15,9 @@
 
         <!-- アイコン画像変更 -->
         <div>
-            <x-picture-input />
+            <x-input-label for="picture" :value="__('Picture')" />
+            <input id="picture" name="picture" type="file" class="mt-1 block w-full" onchange="previewImage(event)" />
+            <img id="picture-preview" src="{{ Auth::user()->profile_photo_url }}" class="rounded-circle mt-2" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
             <x-input-error class="mt-2" :messages="$errors->get('picture')" />
         </div>
 
@@ -89,6 +91,15 @@
 </section>
 
 <script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('picture-preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
     document.getElementById('save-button').addEventListener('click', function(event) {
         event.preventDefault(); // デフォルトのフォーム送信を防ぐ
 
