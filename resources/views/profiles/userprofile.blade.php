@@ -32,16 +32,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="profile-header p-6">
-                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
-                    <h2>USER NAME:{{ $user->name }}</h2>
-                    <p>PET:{{ $user->pet }}</p>
-                    <p>BIO:{{ $user->bio }}</p>
+                    <a href="{{ route('user.profile', $user->id) }}">
+                        <img src="{{ asset('storage/' . $user->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                    </a>
+                    <h2>USER NAME: <a href="{{ route('user.profile', $user->id) }}">{{ $user->name }}</a></h2>
+                    <p>PET: {{ $user->pet }}</p>
+                    <p>BIO: {{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
-                    <p id="followers-count">フォロワー数: {{ $followersCount }}</p>
-                    <p id="following-count">フォロー数: {{ $followingCount }}</p>
-                </div>
-                <div class="p-6">
-                    <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
+                    <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">フォロワー数: {{ $followersCount }}</a></p>
+                    <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">フォロー数: {{ $followingCount }}</a></p>
                 </div>
             </div>
         </div>

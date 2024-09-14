@@ -1,3 +1,26 @@
+<style>
+    .rounded-circle {
+        border-radius: 50%;
+    }
+    .follow-btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .follow-btn.following {
+        background-color: #28a745;
+    }
+    .profile-header {
+        position: relative;
+    }
+</style>
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -11,7 +34,9 @@
                 @foreach ($following as $followed)
                     <div class="p-6 border-b border-gray-200 flex items-center justify-between relative">
                         <div class="flex items-center">
-                            <img src="{{ asset('storage/' . $followed->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover;">
+                            <a href="{{ route('user.profile', $followed->id) }}">
+                                <img src="{{ asset('storage/' . $followed->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover;">
+                            </a>
                             <div class="ml-4">
                                 <a href="{{ route('user.profile', $followed->id) }}" class="text-lg font-semibold">{{ $followed->name }}</a>
                                 <p>{{ $followed->bio }}</p>
