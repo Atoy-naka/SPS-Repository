@@ -24,7 +24,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
+            {{ __('User Profile') }}
         </h2>
     </x-slot>
 
@@ -37,9 +37,8 @@
                     <p>PET:{{ $user->pet }}</p>
                     <p>BIO:{{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
-                    <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">{{ $followersCount }}フォロワー</a></p>
-                    <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">{{ $followingCount }}フォロー中</a></p>
-
+                    <p id="followers-count">フォロワー数: {{ $followersCount }}</p>
+                    <p id="following-count">フォロー数: {{ $followingCount }}</p>
                 </div>
                 <div class="p-6">
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
@@ -82,11 +81,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 followBtn.classList.add('following');
                 followBtn.textContent = 'フォロー中';
             }
-            followersCount.textContent = data.followersCount + ' フォロワー';
-            followingCount.textContent = data.followingCount + ' フォロー中';
+            followersCount.textContent = 'フォロワー数: ' + data.followersCount;
+            followingCount.textContent = 'フォロー数: ' + data.followingCount;
         });
     });
 });
-
     </script>
 </x-app-layout>

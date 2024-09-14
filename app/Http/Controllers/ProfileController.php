@@ -31,6 +31,29 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
+    
+    public function followers(User $user)
+    {
+        $followers = $user->followers()->get();
+        return view('profiles.followers', compact('user', 'followers'));
+    }
+    
+    public function following(User $user)
+    {
+        $following = $user->following()->get();
+        return view('profiles.following', compact('user', 'following'));
+    }
+    
+    public function userProfile(User $user)
+    {
+        return view('profiles.userprofile', [
+            'user' => $user,
+            'followersCount' => $user->followers()->count(),
+            'followingCount' => $user->following()->count(),
+        ]);
+    }
+
+
 
     /**
      * Update the user's profile information.

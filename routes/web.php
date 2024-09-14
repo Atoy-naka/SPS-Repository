@@ -44,6 +44,12 @@ Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow
 Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
 Route::get('/is-following/{user}', [FollowController::class, 'isFollowing'])->name('isFollowing');
 
+//フォロワー一覧画面
+Route::get('/profile/{user}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+//フォローしたユーザー一覧画面
+Route::get('/profile/{user}/following', [ProfileController::class, 'following'])->name('profile.following');
+//一覧ページからユーザーのプロフィール表示画面に遷移した画面
+Route::get('/user/{user}', [ProfileController::class, 'userProfile'])->name('user.profile');
 
 // // プロフィール表示画面
 // Route::get('/profile/show', function () {
