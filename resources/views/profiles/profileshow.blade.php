@@ -2,20 +2,7 @@
     .rounded-circle {
         border-radius: 50%;
     }
-    .follow-btn {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
-    .follow-btn.following {
-        background-color: #28a745;
-    }
+
     .profile-header {
         position: relative;
     }
@@ -36,7 +23,6 @@
                     <h2>USER NAME:{{ $user->name }}</h2>
                     <p>PET:{{ $user->pet }}</p>
                     <p>BIO:{{ $user->bio }}</p>
-                    <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
                     <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">{{ $followersCount }}フォロワー</a></p>
                     <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">{{ $followingCount }}フォロー中</a></p>
 
