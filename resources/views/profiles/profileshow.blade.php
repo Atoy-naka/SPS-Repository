@@ -37,7 +37,7 @@
                     <p>PET:{{ $user->pet }}</p>
                     <p>BIO:{{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
-                    <p id="followers-count">フォロワー数: {{ $user->followers()->count() }}</p>
+                    <p id="followers-count">フォロー数: {{ $user->followers()->count() }}</p>
                 </div>
                 <div class="p-6">
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
@@ -49,15 +49,23 @@
     document.addEventListener('DOMContentLoaded', function() {
         const followBtn = document.getElementById('follow-btn');
         const followersCount = document.getElementById('followers-count');
-        
-
+        const userId = followBtn.getAttribute('data-user-id');
+    
+        // 初期状態をサーバーから取得
+        fetch(`/is-following/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.isFollowing) {
+                    followBtn.classList.add('following');
+                    followBtn.textContent = 'フォロー中';
+                }
+            });
+    
         followBtn.addEventListener('click', function() {
             const isFollowing = followBtn.classList.contains('following');
-            const userId = followBtn.getAttribute('data-user-id');
             const url = isFollowing ? `/unfollow/${userId}` : `/follow/${userId}`;
-            
             const method = 'POST';
-
+    
             fetch(url, {
                 method: method,
                 headers: {
@@ -71,9 +79,10 @@
                     followBtn.classList.add('following');
                     followBtn.textContent = 'フォロー中';
                 }
-                followersCount.textContent = 'フォロワー数: ' + data.followersCount;
-            });
+                followersCount.textContent = 'フォロー数: ' + data.followersCount;
         });
     });
+});
+
 </script>
 </x-app-layout>
