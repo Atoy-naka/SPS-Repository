@@ -2,6 +2,23 @@
     .rounded-circle {
         border-radius: 50%;
     }
+    .follow-btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .follow-btn.following {
+        background-color: #28a745;
+    }
+    .profile-header {
+        position: relative;
+    }
 </style>
 
 <x-app-layout>
@@ -15,10 +32,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="profile-header p-6">
-                    <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
-                    <h2>USER NAME:{{ Auth::user()->name }}</h2>
-                    <p>PET:{{ Auth::user()->pet }}</p>
-                    <p>BIO:{{ Auth::user()->bio }}</p>
+                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h2>USER NAME:{{ $user->name }}</h2>
+                    <p>PET:{{ $user->pet }}</p>
+                    <p>BIO:{{ $user->bio }}</p>
+                    <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
+                    <p id="followers-count">フォロワー数: {{ $user->followers()->count() }}</p>
                 </div>
                 <div class="p-6">
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
@@ -26,4 +45,35 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const followBtn = document.getElementById('follow-btn');
+        const followersCount = document.getElementById('followers-count');
+        
+
+        followBtn.addEventListener('click', function() {
+            const isFollowing = followBtn.classList.contains('following');
+            const userId = followBtn.getAttribute('data-user-id');
+            const url = isFollowing ? `/unfollow/${userId}` : `/follow/${userId}`;
+            
+            const method = 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(response => response.json()).then(data => {
+                if (isFollowing) {
+                    followBtn.classList.remove('following');
+                    followBtn.textContent = 'フォロー';
+                } else {
+                    followBtn.classList.add('following');
+                    followBtn.textContent = 'フォロー中';
+                }
+                followersCount.textContent = 'フォロワー数: ' + data.followersCount;
+            });
+        });
+    });
+</script>
 </x-app-layout>
