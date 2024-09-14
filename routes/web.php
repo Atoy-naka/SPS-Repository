@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FollowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,13 +38,17 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
 });
 
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profileoption');
 
-// プロフィール表示画面
-Route::get('/profile/show', function () {
-    return view('profiles.profileshow');
-})->name('profileoption');
+Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
+Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
 
+// // プロフィール表示画面
+// Route::get('/profile/show', function () {
+//     return view('profiles.profileshow');
+// })->name('profileoption');
 
+Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 
 // プロフィール編集画面
 Route::get('/profile/edit', function () {
@@ -52,6 +57,7 @@ Route::get('/profile/edit', function () {
 
 // プロフィール情報の更新
 Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
 
 // 認証が必要なルート
 Route::middleware('auth')->group(function () {
