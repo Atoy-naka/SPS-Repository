@@ -12,17 +12,18 @@ class FollowController extends Controller
     {
         Auth::user()->following()->attach($user->id);
         $followersCount = $user->followers()->count();
-        return response()->json(['followersCount' => $followersCount]);
+        $followingCount = Auth::user()->following()->count();
+        return response()->json(['followersCount' => $followersCount, 'followingCount' => $followingCount]);
     }
 
     public function unfollow(User $user)
     {
         Auth::user()->following()->detach($user->id);
         $followersCount = $user->followers()->count();
-        return response()->json(['followersCount' => $followersCount]);
+        $followingCount = Auth::user()->following()->count();
+        return response()->json(['followersCount' => $followersCount, 'followingCount' => $followingCount]);
     }
-    
-    //フォロー状態を取得するメソッド
+
     public function isFollowing(User $user)
     {
         $isFollowing = Auth::user()->following()->where('followee_user_id', $user->id)->exists();
