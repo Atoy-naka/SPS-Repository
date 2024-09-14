@@ -37,8 +37,8 @@
                     <p>PET:{{ $user->pet }}</p>
                     <p>BIO:{{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
-                    <p id="followers-count">フォロワー数: {{ $followersCount }}</p>
-                    <p id="following-count">フォロー数: {{ $followingCount }}</p>
+                    <p id="followers-count">{{ $followersCount }} フォロワー</p>
+                    <p id="following-count">{{ $followingCount }} フォロー中</p>
                 </div>
                 <div class="p-6">
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
@@ -81,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 followBtn.classList.add('following');
                 followBtn.textContent = 'フォロー中';
             }
-            followersCount.textContent = 'フォロワー数: ' + data.followersCount;
-            followingCount.textContent = 'フォロー数: ' + data.followingCount;
+            followersCount.textContent = data.followersCount + ' フォロワー';
+            followingCount.textContent = data.followingCount + ' フォロー中';
         });
     });
 });
