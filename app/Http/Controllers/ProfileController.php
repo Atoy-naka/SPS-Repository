@@ -15,7 +15,11 @@ class ProfileController extends Controller
     
     public function show(User $user)
     {
-        return view('profiles/profileshow', ['user' => $user]);
+        return view('profiles.profileshow', [
+            'user' => $user,
+            'followersCount' => $user->followers_count,
+            'followingCount' => $user->following_count,
+        ]);
     }
     
     /**

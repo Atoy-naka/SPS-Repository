@@ -57,5 +57,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_user_id', 'followee_user_id');
     }
+    
+    public function getFollowersCountAttribute()
+    {
+        return $this->followers()->count();
+    }
+
+    public function getFollowingCountAttribute()
+    {
+        return $this->following()->count();
+    }
 
 }
