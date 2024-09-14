@@ -21,4 +21,11 @@ class FollowController extends Controller
         $followersCount = $user->followers()->count();
         return response()->json(['followersCount' => $followersCount]);
     }
+    
+    //フォロー状態を取得するメソッド
+    public function isFollowing(User $user)
+    {
+        $isFollowing = Auth::user()->following()->where('followee_user_id', $user->id)->exists();
+        return response()->json(['isFollowing' => $isFollowing]);
+    }
 }

@@ -42,6 +42,8 @@ Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile
 
 Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
 Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
+Route::get('/is-following/{user}', [FollowController::class, 'isFollowing'])->name('isFollowing');
+
 
 // // プロフィール表示画面
 // Route::get('/profile/show', function () {
