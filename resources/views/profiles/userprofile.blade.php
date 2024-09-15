@@ -32,10 +32,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="profile-header p-6">
-                    <a href="{{ route('user.profile', $user->id) }}">
-                        <img src="{{ asset('storage/' . $user->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
-                    </a>
-                    <h2>USER NAME: <a href="{{ route('user.profile', $user->id) }}">{{ $user->name }}</a></h2>
+                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h2>USER NAME:{{ $user->name }}</h2>
                     <p>PET: {{ $user->pet }}</p>
                     <p>BIO: {{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
