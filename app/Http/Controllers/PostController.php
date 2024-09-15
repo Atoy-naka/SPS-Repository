@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use Cloudinary;
 
 class PostController extends Controller
 {
@@ -28,8 +29,12 @@ class PostController extends Controller
     public function store(Post $post, PostRequest $request)
     {
         $input = $request['post'];
+        if($request->file('image')){ //画像ファイルが送られた時だけ処理が実行される
+            $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+            $input += ['image_url' => $image_url];
+        }
         $post->fill($input)->save();
-        return redirect('/'); // 投稿一覧ページにリダイレクト
+        return redirect('/posts/' . $post->id);
     }
     
     public function edit(Post $post)
