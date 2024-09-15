@@ -12,7 +12,7 @@
     </head>
     <body>
         <h1>Post</h1>
-        <form action="/posts" method="POST">
+        <form action="/posts" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="category">
                 <h2>投稿カテゴリ</h2>
@@ -31,6 +31,9 @@
                 <h2>本文</h2>
                 <textarea name="post[body]" placeholder="本文を入力">{{ old('post.body') }}</textarea>
                 <p class="body__error" style="color:red">{{ $errors->first('post.body') }}</p>
+            </div>
+            <div class="image">
+                <input type="file" name="image">
             </div>
             <input type="submit" value="投稿"/>
         </form>
