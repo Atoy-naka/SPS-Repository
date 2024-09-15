@@ -1,3 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* public/css/app.css */
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.post-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.post-title {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+}
+
+.post-body {
+    font-size: 1em;
+    color: #333;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    margin-top: 8px;
+    border-radius: 8px;
+}
+
+.rounded-circle {
+    border-radius: 50%;
+}
+
+.follow-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.follow-btn.following {
+    background-color: #28a745;
+}
+
+.profile-header {
+    position: relative;
+}

@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use Cloudinary;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
     public function index(Post $post)
     {
-        return view('posts.index')->with(['posts' => $post->getPaginateByLimit()]);
+        $posts = $post->getPaginateByLimit(); // getPaginateByLimitメソッドを使用
+        return view('posts.index')->with(['posts' => $posts]);
     }
 
     public function show(Post $post)
@@ -29,6 +30,8 @@ class PostController extends Controller
     public function store(Post $post, PostRequest $request)
     {
         $input = $request['post'];
+        $input['user_id'] = Auth::id(); // 現在のユーザーのIDを設定
+
         if($request->file('image')){ //画像ファイルが送られた時だけ処理が実行される
             $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
             $input += ['image_url' => $image_url];
@@ -36,51 +39,42 @@ class PostController extends Controller
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
     }
-    
+
     public function edit(Post $post)
     {
         return view('posts.edit')->with(['post' => $post]);
     }
-    
+
     public function update(PostRequest $request, Post $post)
     {
         $input_post = $request['post'];
         $post->fill($input_post)->save();
-        
-        
         return redirect('/posts/' . $post->id);
     }
-    
+
     public function delete(Post $post)
     {
         $post->delete();
         return redirect('/');
     }
-    
-    //検索機能を実装するメソッド
+
     public function search(Request $request)
     {
-        // 検索ボックスに入力されたキーワードを取得
         $keyword = $request->input('keyword'); 
         
-        // キーワードが入力されている場合、タイトルまたは本文に部分一致する投稿を検索
         if ($keyword) {
             $posts = Post::where('title', 'LIKE', "%{$keyword}%")
                          ->orWhere('body', 'LIKE', "%{$keyword}%")
-                         ->paginate(10); // ページネーションを設定
+                         ->paginate(10);
         } else {
-            // キーワードが入力されていない場合、空のコレクションを返す
-            $posts = collect(); // 空のコレクションを設定
+            $posts = collect();
         }
         
-        //検索結果をビューに渡す
         return view('searches.search', compact('posts'));
     }
 
-    // 検索した投稿の詳細画面を表示するメソッド
     public function searchshow(Post $post)
     {
         return view('searches.searchshow')->with(['post' => $post]);
     }
 }
-    
