@@ -107,7 +107,6 @@
                         @method('DELETE')
                         <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
                     </form>
-                    <a href="/chat/{{ $post->user->id }}">{{ $post->user->name }}とチャットする</a>
                 </div>
             </div>
         @endforeach
