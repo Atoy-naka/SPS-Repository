@@ -9,10 +9,20 @@ class Room extends Model
 {
     use HasFactory;
     
-   protected $table = 'chats';
+    protected $table = 'chats';
 
-   public function messages()
+    public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(User::class, 'guest_id');
     }
 }

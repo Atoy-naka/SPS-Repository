@@ -1,0 +1,38 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Chat') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold mb-4">チャット一覧</h2>
+                    @foreach ($chats as $chat)
+                        @php
+                            $latestMessage = $chat->messages()->latest()->first();
+                        @endphp
+                        <div class="mb-4 p-4 border rounded-lg flex items-center">
+                            <img src="{{ asset('storage/' . ($chat->owner_id == auth()->id() ? $chat->guest->profile_photo_path : $chat->owner->profile_photo_path)) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                            <div class="flex-grow">
+                                <div class="text-sm text-gray-500">
+                                    {{ $chat->owner_id == auth()->id() ? $chat->guest->name : $chat->owner->name }}
+                                </div>
+                                <div class="text-lg font-semibold">
+                                    <a href="{{ route('openChat', $chat->id) }}">
+                                        {{ $latestMessage->user_id == auth()->id() ? 'あなた' : $latestMessage->user->name }}: {{ $latestMessage->body }}
+                                    </a>
+                                </div>
+                                <div class="text-sm text-gray-400 text-right">
+                                    {{ $latestMessage->created_at->format('Y-m-d H:i') }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

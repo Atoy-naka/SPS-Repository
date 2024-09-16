@@ -19,7 +19,7 @@
                         <input type="hidden" id="chat_id" name="chat_id" value="{{ $chat->id }}"> 
                         <button type="submit" class="text-white bg-blue-700 px-5 py-2">送信</button>
                     </form>
-                
+
                     <ul class="list-disc" id="list_message">
                         @foreach ($messages as $message)
                             <li>
