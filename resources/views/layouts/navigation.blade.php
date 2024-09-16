@@ -24,10 +24,6 @@
                     <x-nav-link :href="route('profileoption', ['user' => Auth::id()])" :active="request()->routeIs('profileoption')">
                         {{ __('Profile') }}
                     </x-nav-link>
-                    <!-- Chat Link -->
-                    <x-nav-link :href="route('chats.index')" :active="request()->routeIs('chats.index')">
-                        {{ __('Chat') }}
-                    </x-nav-link>
                 </div>
             </div>
 

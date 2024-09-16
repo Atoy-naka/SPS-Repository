@@ -38,49 +38,30 @@ class ChatController extends Controller
 
         return view('chats/chat')->with(['chat' => $chat, 'messages' => $messages]);
     }
-    
-    public function sendMessage(Request $request)
+
+    public function sendMessage(Message $message, Request $request,)
     {
+        // auth()->user() : 現在認証しているユーザーを取得
         $user = auth()->user();
         $strUserId = $user->id;
         $strUsername = $user->name;
-    
+
+        // リクエストからデータの取り出し
         $strMessage = $request->input('message');
-        $chatId = $request->input('chat_id');
-    
-        // メッセージの保存
-        $message = new Message;
+        // メッセージオブジェクトの作成
+        $chat = new Chat;
+        $chat->body = $strMessage;
+        $chat->chat_id = $request->input('chat_id');
+
+        $chat->userName = $strUsername;
+        MessageSent::dispatch($chat);    
+
+        //データベースへの保存処理
         $message->user_id = $strUserId;
         $message->body = $strMessage;
-        $message->chat_id = $chatId;
+        $message->chat_id = $request->input('chat_id');
         $message->save();
-    
-        // チャットの更新
-        $chat = Room::find($chatId);
-        $chat->updated_at = now();
-        $chat->save();
-    
-        // イベントのディスパッチ
-        $chatMessage = new Chat;
-        $chatMessage->body = $strMessage;
-        $chatMessage->chat_id = $chatId;
-        $chatMessage->userName = $strUsername;
-    
-        MessageSent::dispatch($chatMessage);
-    
+
         return response()->json(['message' => 'Message sent successfully']);
     }
-
-    
-    public function index()
-    {
-        $user = auth()->user();
-        $chats = Room::where('owner_id', $user->id)
-                    ->orWhere('guest_id', $user->id)
-                    ->with(['owner', 'guest'])
-                    ->get();
-    
-        return view('chats.index', compact('chats'));
-    }
-
 }
