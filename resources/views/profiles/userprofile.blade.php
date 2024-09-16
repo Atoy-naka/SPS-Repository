@@ -1,26 +1,3 @@
-<style>
-    .rounded-circle {
-        border-radius: 50%;
-    }
-    .follow-btn {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
-    .follow-btn.following {
-        background-color: #28a745;
-    }
-    .profile-header {
-        position: relative;
-    }
-</style>
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -39,6 +16,7 @@
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
                     <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">フォロワー数: {{ $followersCount }}</a></p>
                     <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">フォロー数: {{ $followingCount }}</a></p>
+                    <a href="/chat/{{ $user->id }}">{{ $user->name }}とチャットする</a>
                 </div>
             </div>
         </div>
