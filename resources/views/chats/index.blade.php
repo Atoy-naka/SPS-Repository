@@ -11,14 +11,24 @@
                 <div class="p-6">
                     <h2 class="text-2xl font-bold mb-4">チャット一覧</h2>
                     @foreach ($chats as $chat)
-                        <div class="mb-4 p-4 border rounded-lg">
-                            <a href="{{ route('openChat', $chat->id) }}" class="text-lg font-semibold">
-                                @if ($chat->owner_id == auth()->id())
-                                    {{ $chat->guest->name }}
-                                @else
-                                    {{ $chat->owner->name }}
-                                @endif
-                            </a>
+                        @php
+                            $latestMessage = $chat->messages()->latest()->first();
+                        @endphp
+                        <div class="mb-4 p-4 border rounded-lg flex items-center">
+                            <img src="{{ asset('storage/' . ($chat->owner_id == auth()->id() ? $chat->guest->profile_photo_path : $chat->owner->profile_photo_path)) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                            <div class="flex-grow">
+                                <div class="text-sm text-gray-500">
+                                    {{ $chat->owner_id == auth()->id() ? $chat->guest->name : $chat->owner->name }}
+                                </div>
+                                <div class="text-lg font-semibold">
+                                    <a href="{{ route('openChat', $chat->id) }}">
+                                        {{ $latestMessage->user_id == auth()->id() ? 'あなた' : $latestMessage->user->name }}: {{ $latestMessage->body }}
+                                    </a>
+                                </div>
+                                <div class="text-sm text-gray-400 text-right">
+                                    {{ $latestMessage->created_at->format('Y-m-d H:i') }}
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
