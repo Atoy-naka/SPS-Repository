@@ -64,4 +64,16 @@ class ChatController extends Controller
 
         return response()->json(['message' => 'Message sent successfully']);
     }
+    
+    public function index()
+    {
+        $user = auth()->user();
+        $chats = Room::where('owner_id', $user->id)
+                    ->orWhere('guest_id', $user->id)
+                    ->with(['owner', 'guest'])
+                    ->get();
+    
+        return view('chats.index', compact('chats'));
+    }
+
 }
