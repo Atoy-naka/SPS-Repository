@@ -84,5 +84,14 @@ class ChatController extends Controller
         // チャット一覧ビューを表示し、取得したチャットルームを渡す
         return view('chats.index', compact('chats'));
     }
+    
+    public function destroy(Room $chat)
+    {
+        $chat->messages()->delete(); // チャットに関連するメッセージを削除
+        $chat->delete(); // チャットルームを削除
+    
+        return redirect()->route('chats.index')->with('success', 'チャットルームが削除されました');
+    }
+
 
 }
