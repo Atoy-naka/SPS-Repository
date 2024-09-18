@@ -25,6 +25,7 @@ class ChatController extends Controller
             $query->where('owner_id', $otherUserId)
                 ->where('guest_id', $myUserId);
         })->first();
+
         // チャットが存在しない場合、新しいチャットを作成
         if (!$chat) {
             $chat = new Room();
@@ -33,35 +34,56 @@ class ChatController extends Controller
             $chat->save();
         }
 
-        $messages = Message::where('chat_id', $chat->id)->orderBy('updated_at', 'DESC')->get();;
-
+        // メッセージを取得
+        $messages = Message::where('chat_id', $chat->id)->orderBy('updated_at', 'DESC')->get();
 
         return view('chats/chat')->with(['chat' => $chat, 'messages' => $messages]);
     }
 
-    public function sendMessage(Message $message, Request $request,)
+    public function sendMessage(Request $request)
     {
-        // auth()->user() : 現在認証しているユーザーを取得
+        // 現在認証されているユーザーを取得
         $user = auth()->user();
         $strUserId = $user->id;
         $strUsername = $user->name;
-
-        // リクエストからデータの取り出し
+    
+        // リクエストからメッセージとチャットIDを取得
         $strMessage = $request->input('message');
-        // メッセージオブジェクトの作成
+        $chatId = $request->input('chat_id');
+    
+        // 新しいChatオブジェクトを作成し、メッセージ情報を設定
         $chat = new Chat;
         $chat->body = $strMessage;
-        $chat->chat_id = $request->input('chat_id');
-
+        $chat->chat_id = $chatId;
         $chat->userName = $strUsername;
-        MessageSent::dispatch($chat);    
-
-        //データベースへの保存処理
+    
+        // メッセージ送信イベントをディスパッチ
+        MessageSent::dispatch($chat);
+    
+        // 新しいMessageオブジェクトを作成し、データベースに保存
+        $message = new Message;
         $message->user_id = $strUserId;
         $message->body = $strMessage;
-        $message->chat_id = $request->input('chat_id');
+        $message->chat_id = $chatId;
         $message->save();
-
+    
+        // メッセージ送信成功のレスポンスを返す
         return response()->json(['message' => 'Message sent successfully']);
     }
+    
+    public function index()
+    {
+        // 現在認証されているユーザーのIDを取得
+        $userId = auth()->user()->id;
+    
+        // ユーザーがオーナーまたはゲストとして参加しているチャットルームを取得し、関連するオーナー、ゲスト、メッセージをロード
+        $chats = Room::where('owner_id', $userId)
+                    ->orWhere('guest_id', $userId)
+                    ->with(['owner', 'guest', 'messages'])
+                    ->get();
+    
+        // チャット一覧ビューを表示し、取得したチャットルームを渡す
+        return view('chats.index', compact('chats'));
+    }
+
 }
