@@ -77,6 +77,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/chat/{user}', [ChatController::class, 'openChat'])->name('openChat');
 Route::post('/chat', [ChatController::class, 'sendMessage'])->name('endMessage');
-Route::get('/chat', [ChatController::class, 'index'])->name('chats.index');
+Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
 
 require __DIR__.'/auth.php';
