@@ -13,32 +13,31 @@ class ChatController extends Controller
 {
     public function openChat(User $user)
     {
-        // 自分と相手のIDを取得
         $myUserId = auth()->user()->id;
-        $otherUserId = $user->id; // ここで相手のユーザーIDを指定
-
-        // データベース内でチャットが存在するかを確認
+        $otherUserId = $user->id;
+    
         $chat = Room::where(function($query) use ($myUserId, $otherUserId) {
             $query->where('owner_id', $myUserId)
                 ->where('guest_id', $otherUserId);
         })->orWhere(function($query) use ($myUserId, $otherUserId) {
             $query->where('owner_id', $otherUserId)
                 ->where('guest_id', $myUserId);
-        })->first();
-
-        // チャットが存在しない場合、新しいチャットを作成
+        })->with(['owner', 'guest'])->first();
+    
         if (!$chat) {
             $chat = new Room();
             $chat->owner_id = $myUserId;
             $chat->guest_id = $otherUserId;
             $chat->save();
         }
-
-        // メッセージを取得
+    
         $messages = Message::where('chat_id', $chat->id)->orderBy('updated_at', 'DESC')->get();
-
-        return view('chats/chat')->with(['chat' => $chat, 'messages' => $messages]);
+    
+        // $user変数をビューに渡す
+        return view('chats/chat')->with(['chat' => $chat, 'messages' => $messages, 'user' => $user]);
     }
+
+
 
     public function sendMessage(Request $request)
     {
