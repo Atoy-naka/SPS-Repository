@@ -79,5 +79,6 @@ Route::get('/chat/{user}', [ChatController::class, 'openChat'])->name('openChat'
 Route::post('/chat', [ChatController::class, 'sendMessage'])->name('endMessage');
 Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
 Route::delete('/chat/{chat}', [ChatController::class, 'destroy'])->name('chat.destroy');
+Route::post('/chat/read', [ChatController::class, 'markAsRead'])->name('message.read');
 
 require __DIR__.'/auth.php';

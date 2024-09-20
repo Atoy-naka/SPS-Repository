@@ -24,4 +24,10 @@ class Message extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function markAsRead()
+    {
+        $this->is_read = true;
+        $this->save();
+    }
 }
