@@ -24,7 +24,7 @@
                             <li class="{{ $message->user->id === auth()->user()->id ? 'sent' : 'received' }}">
                                 <div class="message-bubble {{ $message->user->id === auth()->user()->id ? 'sent-bubble' : 'received-bubble' }}">
                                     <div>{{ $message->body }}</div>
-                                    <div class="timestamp {{ $message->user->id === auth()->user()->id ? 'sent-timestamp' : 'received-timestamp' }}">
+                                    <div class="timestamp {{ $message->user->id === auth()->user()->id ? 'sent-timestamp' : 'received-timestamp' }}" data-message-id="{{ $message->id }}">
                                         {{ $message->created_at->format('H:i') }}
                                     </div>
                                 </div>
@@ -41,65 +41,67 @@
         <button type="submit" class="text-white bg-blue-700 px-5 py-2">送信</button>
     </form>
 <script>
-        const elementInputMessage = document.getElementById( "input_message" );
-        const chatId = document.getElementById("chat_id").value;
-        
-        function onsubmit_Form()
-        {
-            let strMessage = elementInputMessage.value;
-            if( !strMessage )
-            {
-                return;
-            }
-            params = { 
-                'message': strMessage,
-                'chat_id': chatId
-            };
-            
-            axios
-                .post( '/chat', params )
-                .then( response => {
-                    console.log(response);
-                    console.log(chatId);
-                    addMessageToList(strMessage, "{{ auth()->user()->name }}", true);
-                } )
-                .catch(error => {
-                    console.log(error.response);
-                } );
-            elementInputMessage.value = "";
-        }
+    const elementInputMessage = document.getElementById("input_message");
+    const chatId = document.getElementById("chat_id").value;
 
-        function addMessageToList(message, isSent) {
-            const elementListMessage = document.getElementById("list_message");
-            let elementLi = document.createElement("li");
-            elementLi.className = isSent ? 'sent' : 'received';
-            let elementBubble = document.createElement("div");
-            elementBubble.className = isSent ? 'message-bubble sent-bubble' : 'message-bubble received-bubble';
-            let elementMessage = document.createElement("div");
-            let elementTimestamp = document.createElement("div");
-            elementTimestamp.className = isSent ? 'timestamp sent-timestamp' : 'timestamp received-timestamp';
-            elementTimestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            elementMessage.textContent = message;
-            elementBubble.append(elementMessage);
-            elementBubble.append(elementTimestamp);
-            elementLi.append(elementBubble);
-            elementListMessage.appendChild(elementLi); // 下に追加
-            elementListMessage.scrollTop = elementListMessage.scrollHeight; // スクロールを一番下に
+    function onsubmit_Form() {
+        let strMessage = elementInputMessage.value;
+        if (!strMessage) {
+            return;
         }
+        params = {
+            'message': strMessage,
+            'chat_id': chatId
+        };
 
-        window.addEventListener("DOMContentLoaded", () => {
-            const elementListMessage = document.getElementById("list_message");
-            const chatContainer = document.getElementById("chat-container");
-            chatContainer.scrollTop = chatContainer.scrollHeight; // 初期表示時にスクロールを一番下に
-            window.Echo.private('chat').listen('MessageSent', (e) => {
-                console.log(e);
-                
-                if (e.chat.chat_id === chatId && e.chat.user_id !== {{ auth()->user()->id }}) {
-                    addMessageToList(e.chat.body, false);
-                }
+        axios
+            .post('/chat', params)
+            .then(response => {
+                console.log(response);
+                console.log(chatId);
+                addMessageToList(strMessage, true, response.data.message_id);
+            })
+            .catch(error => {
+                console.log('AAA');
+                console.log(error.response);
             });
+        elementInputMessage.value = "";
+    }
+
+    function addMessageToList(message, isSent, messageId) {
+        console.log("isSent:", isSent);
+        const elementListMessage = document.getElementById("list_message");
+        let elementLi = document.createElement("li");
+        elementLi.className = isSent ? 'sent' : 'received';
+        let elementBubble = document.createElement("div");
+        elementBubble.className = isSent ? 'message-bubble sent-bubble' : 'message-bubble received-bubble';
+        let elementMessage = document.createElement("div");
+        let elementTimestamp = document.createElement("div");
+        elementTimestamp.className = isSent ? 'timestamp sent-timestamp' : 'timestamp received-timestamp';
+        elementTimestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        elementTimestamp.dataset.messageId = messageId;
+        elementMessage.textContent = message;
+        elementBubble.append(elementMessage);
+        elementBubble.append(elementTimestamp);
+        elementLi.append(elementBubble);
+        elementListMessage.appendChild(elementLi);
+        elementListMessage.scrollTop = elementListMessage.scrollHeight;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementListMessage = document.getElementById("list_message");
+        const chatContainer = document.getElementById("chat-container");
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        window.Echo.private('chat').listen('MessageSent', (e) => {
+            console.log(e);
+
+            if (e.chat.chat_id === chatId && e.chat.user_id !== {{ auth()->user()->id }}) {
+                addMessageToList(e.chat.body, false, e.chat.id);
+            }
         });
+    });
 </script>
+
 <style>
     .sent {
         text-align: right;

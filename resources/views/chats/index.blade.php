@@ -29,6 +29,9 @@
                                         </div>
                                         <div class="text-sm text-gray-400 text-right">
                                             {{ $latestMessage->created_at->format('Y-m-d H:i') }}
+                                            @if ($latestMessage->is_read)
+                                                <span class="read-status">既読</span>
+                                            @endif
                                         </div>
                                     @else
                                         <div class="text-lg font-semibold">
@@ -42,7 +45,7 @@
                             <form action="{{ route('chat.destroy', $chat->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');" style="position: relative; z-index: 10;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-white bg-red-700 px-5 py-2 ml-4" style="position: relative; z-index: 20; display: block;">削除</button>
+                                <button type="submit" class="text-white bg-red-700 px-5 py-2 ml-4" style="position: relative; z-index: 20;">削除</button>
                             </form>
                         </div>
                     @endforeach
@@ -51,3 +54,4 @@
         </div>
     </div>
 </x-app-layout>
+
