@@ -59,7 +59,6 @@
             .then(response => {
                 console.log(response);
                 console.log(chatId);
-                addMessageToList(strMessage, true, response.data.message_id);
             })
             .catch(error => {
                 console.log('AAA');
@@ -72,19 +71,19 @@
         console.log("isSent:", isSent);
         const elementListMessage = document.getElementById("list_message");
         let elementLi = document.createElement("li");
-        elementLi.className = isSent ? 'sent' : 'received';
+        elementLi.className = isSent ? 'received' : 'sent';
         let elementBubble = document.createElement("div");
-        elementBubble.className = isSent ? 'message-bubble sent-bubble' : 'message-bubble received-bubble';
+        elementBubble.className = isSent ? 'message-bubble received-bubble' : 'message-bubble sent-bubble';
         let elementMessage = document.createElement("div");
         let elementTimestamp = document.createElement("div");
-        elementTimestamp.className = isSent ? 'timestamp sent-timestamp' : 'timestamp received-timestamp';
+        elementTimestamp.className = isSent ? 'timestamp received-timestamp' : 'timestamp sent-timestamp';
         elementTimestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         elementTimestamp.dataset.messageId = messageId;
         elementMessage.textContent = message;
         elementBubble.append(elementMessage);
         elementBubble.append(elementTimestamp);
         elementLi.append(elementBubble);
-        elementListMessage.appendChild(elementLi);
+        elementListMessage.prepend(elementLi);
         elementListMessage.scrollTop = elementListMessage.scrollHeight;
     }
 
@@ -95,7 +94,7 @@
         window.Echo.private('chat').listen('MessageSent', (e) => {
             console.log(e);
 
-            if (e.chat.chat_id === chatId && e.chat.user_id !== {{ auth()->user()->id }}) {
+            if (e.chat.chat_id === chatId) {
                 addMessageToList(e.chat.body, false, e.chat.id);
             }
         });
