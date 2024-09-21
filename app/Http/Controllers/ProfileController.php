@@ -70,7 +70,6 @@ class ProfileController extends Controller
             'pet' => 'nullable|string|max:255',
             'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
         $user = Auth::user();
         $user->name = $request->name;
         $user->email = $request->email;

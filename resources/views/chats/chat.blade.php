@@ -95,7 +95,7 @@
             console.log(e);
 
             if (e.chat.chat_id === chatId) {
-                addMessageToList(e.chat.body, false, e.chat.id);
+                addMessageToList(e.chat.body, true, e.chat.id);
             }
         });
     });
