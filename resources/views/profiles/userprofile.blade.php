@@ -14,8 +14,8 @@
                     <p>PET: {{ $user->pet }}</p>
                     <p>BIO: {{ $user->bio }}</p>
                     <button id="follow-btn" class="follow-btn" data-user-id="{{ $user->id }}">フォロー</button>
-                    <p id="followers-count">フォロワー数: {{ $followersCount }}</p>
-                    <p id="following-count">フォロー数: {{ $followingCount }}</p>
+                    <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">フォロワー数: {{ $followersCount }}</a></p>
+                    <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">フォロー数: {{ $followingCount }}</a></p>
                     <a href="/chat/{{ $user->id }}">{{ $user->name }}とチャットする</a>
                 </div>
             </div>
@@ -25,6 +25,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const followBtn = document.getElementById('follow-btn');
     const followersCount = document.getElementById('followers-count');
+    const followingCount = document.getElementById('following-count');
     const userId = followBtn.getAttribute('data-user-id');
 
     // 初期状態をサーバーから取得
