@@ -35,10 +35,8 @@
     </div>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const followBtn = document.getElementById('follow-btn');
     const followersCount = document.getElementById('followers-count');
     const followingCount = document.getElementById('following-count');
-    const userId = followBtn.getAttribute('data-user-id');
 
     // 初期状態をサーバーから取得
     fetch(`/is-following/${userId}`)
