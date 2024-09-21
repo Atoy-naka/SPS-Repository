@@ -97,6 +97,7 @@
 
             if (e.chat.chat_id === chatId) {
                 addMessageToList(e.chat.body, isReceiver, e.chat.id);
+                isReceiver = true;
             }
         });
     });
