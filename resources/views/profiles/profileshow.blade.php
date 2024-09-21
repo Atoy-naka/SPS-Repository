@@ -25,7 +25,6 @@
                     <p>BIO:{{ $user->bio }}</p>
                     <p id="followers-count"><a href="{{ route('profile.followers', $user->id) }}">{{ $followersCount }}フォロワー</a></p>
                     <p id="following-count"><a href="{{ route('profile.following', $user->id) }}">{{ $followingCount }}フォロー中</a></p>
-
                 </div>
                 <div class="p-6">
                     <a href="{{ route('profile.edit') }}" class="btn btn-primary">編集</a>
@@ -35,8 +34,10 @@
     </div>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const followBtn = document.getElementById('follow-btn');
     const followersCount = document.getElementById('followers-count');
     const followingCount = document.getElementById('following-count');
+    const userId = followBtn.getAttribute('data-user-id');
 
     // 初期状態をサーバーから取得
     fetch(`/is-following/${userId}`)
