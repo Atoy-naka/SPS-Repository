@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
                         {{ __('HOME') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('communities.index')" :active="request()->routeIs('communities.index')">
+                        {{ __('Communities') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('search')" :active="request()->routeIs('search')">
                         {{ __('Search') }}
                     </x-nav-link>

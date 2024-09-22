@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use Cloudinary;
 
 class ProfileController extends Controller
 {
@@ -81,13 +82,13 @@ class ProfileController extends Controller
     
         // アイコン画像の保存処理
         if ($request->hasFile('picture')) {
-            $path = $request->file('picture')->store('profile_pictures', 'public');
+            $path = Cloudinary::upload($request->file('picture')->getRealPath())->getSecurePath();
             $user->profile_photo_path = $path;
         }
     
         $user->save();
     
-        return redirect()->route('profileoption')->with('status', 'profile-updated');
+        return redirect('/profile/' . $user->id)->with('status', 'profile-updated');
     }
 
     /**
