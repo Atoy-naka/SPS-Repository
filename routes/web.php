@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\CommunityPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +41,7 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
 });
 
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
-Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profileoption');
+Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profileoption')->middleware("auth");
 
 Route::post('/follow/{user}', [FollowController::class, 'follow'])->name('follow');
 Route::post('/unfollow/{user}', [FollowController::class, 'unfollow'])->name('unfollow');
@@ -65,7 +67,7 @@ Route::get('/profile/edit', function () {
 })->name('profile.edit');
 
 // プロフィール情報の更新
-Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+//Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 
 // 認証が必要なルート
@@ -80,5 +82,10 @@ Route::post('/chat', [ChatController::class, 'sendMessage'])->name('endMessage')
 Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
 Route::delete('/chat/{chat}', [ChatController::class, 'destroy'])->name('chat.destroy');
 Route::post('/chat/read', [ChatController::class, 'markAsRead'])->name('message.read');
+
+Route::resource('communities', CommunityController::class);
+Route::get('communities/{community}/posts/create', [CommunityPostController::class, 'create'])->name('communities.posts.create');
+Route::post('communities/{community}/posts', [CommunityPostController::class, 'store'])->name('communities.posts.store');
+
 
 require __DIR__.'/auth.php';
