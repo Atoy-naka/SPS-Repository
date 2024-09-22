@@ -43,8 +43,9 @@
 <script>
     const elementInputMessage = document.getElementById("input_message");
     const chatId = document.getElementById("chat_id").value;
-
+    let isReceiver = true;
     function onsubmit_Form() {
+        isReceiver = false;
         let strMessage = elementInputMessage.value;
         if (!strMessage) {
             return;
@@ -95,7 +96,8 @@
             console.log(e);
 
             if (e.chat.chat_id === chatId) {
-                addMessageToList(e.chat.body, false, e.chat.id);
+                addMessageToList(e.chat.body, isReceiver, e.chat.id);
+                isReceiver = true;
             }
         });
     });

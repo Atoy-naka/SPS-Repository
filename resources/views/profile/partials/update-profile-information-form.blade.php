@@ -97,6 +97,7 @@
             @endif
             <p id="saved-message" style="display: none;" class="text-sm text-gray-600">{{ __('更新しました。') }}</p>
 
+
             <!-- プロフィール表示画面へのボタン -->
             <a href="{{ route('profileoption', ['user' => $user->id]) }}" class="btn btn-secondary">
                 {{ __('プロフィールへ') }}

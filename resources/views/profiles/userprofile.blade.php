@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 followBtn.textContent = 'フォロー中';
             }
             followersCount.textContent = 'フォロワー数: ' + data.followersCount;
-            followingCount.textContent = 'フォロー数: ' + data.followingCount;
         });
     });
 });
