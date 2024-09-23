@@ -86,6 +86,9 @@ Route::post('/chat/read', [ChatController::class, 'markAsRead'])->name('message.
 Route::resource('communities', CommunityController::class);
 Route::get('communities/{community}/posts/create', [CommunityPostController::class, 'create'])->name('communities.posts.create');
 Route::post('communities/{community}/posts', [CommunityPostController::class, 'store'])->name('communities.posts.store');
+Route::post('communities/{community}/join', [CommunityController::class, 'join'])->name('communities.join');
+Route::post('communities/{community}/leave', [CommunityController::class, 'leave'])->name('communities.leave');
+Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
 
 
 require __DIR__.'/auth.php';

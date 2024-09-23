@@ -1,108 +1,74 @@
 <x-app-layout>
     <x-slot name="header">
-        投稿
+        <div class="header-content">
+            コミュニティ作成
+        </div>
     </x-slot>
+
     <style>
+        .header-content {
+            padding: 20px;
+        }
+
         .container {
             width: 80%;
-            margin: 0 auto;
-        }
-
-        .post-card {
-            border: 1px solid #ddd;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
+        .form-group {
+            margin-bottom: 15px;
         }
 
-        .profile-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 12px;
-        }
-
-        .user-name {
+        .form-group label {
+            display: block;
             font-weight: bold;
-            font-size: 1.2em;
+            margin-bottom: 5px;
         }
 
-        .post-title {
-            font-size: 1.2em;
-            margin-bottom: 8px;
-        }
-
-        .post-body {
-            font-size: 1em;
-            color: #333;
-        }
-
-        .post-image {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
-            height: auto;
-            margin-top: 8px;
-            border-radius: 8px;
-            max-width: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
-        .rounded-circle {
-            border-radius: 50%;
+        .form-group textarea {
+            resize: vertical;
+            height: 150px;
         }
 
-        .follow-btn {
-            padding: 10px 20px;
+        .btn-primary {
             background-color: #007bff;
             color: white;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
         }
 
-        .follow-btn.following {
-            background-color: #28a745;
-        }
-
-        .profile-header {
-            position: relative;
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
     </style>
-    <h1>Post</h1>
-    <form action="{{ route('communities.posts.store', $community) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="category">
-            <h2>投稿カテゴリ</h2>
-            <select name="post[category_id]">
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="title">
-            <h2>タイトル</h2>
-            <input type="text" name="post[title]" placeholder="タイトルを入力" value="{{ old('post.title') }}"/>
-            <p class="title__error" style="color:red">{{ $errors->first('post.title') }}</p>
-        </div>
-        <div class="body">
-            <h2>本文</h2>
-            <textarea name="post[body]" placeholder="本文を入力">{{ old('post.body') }}</textarea>
-            <p class="body__error" style="color:red">{{ $errors->first('post.body') }}</p>
-        </div>
-        <div class="image">
-            <input type="file" name="image">
-        </div>
-        <input type="submit" value="投稿"/>
-    </form>
-    <div class="footer">
-        <a href="{{ route('communities.show', $community) }}">戻る</a>
+
+    <div class="container">
+        <form action="{{ route('communities.store') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="name">コミュニティ名</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">作成</button>
+        </form>
     </div>
 </x-app-layout>
