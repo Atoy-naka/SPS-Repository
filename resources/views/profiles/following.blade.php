@@ -35,7 +35,7 @@
                     <div class="p-6 border-b border-gray-200 flex items-center justify-between relative">
                         <div class="flex items-center">
                             <a href="{{ route('user.profile', $followed->id) }}">
-                                <img src="{{ asset('storage/' . $followed->profile_photo_path) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover;">
+                                <img src="{{ $followed->profile_photo_path }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover;">
                             </a>
                             <div class="ml-4">
                                 <a href="{{ route('user.profile', $followed->id) }}" class="text-lg font-semibold">{{ $followed->name }}</a>
