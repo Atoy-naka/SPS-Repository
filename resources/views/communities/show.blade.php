@@ -1,125 +1,36 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ $community->name }}
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                コミュニティ詳細
+            </h2>
+            <a href="{{ route('communities.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                コミュニティ作成
+            </a>
+        </div>
     </x-slot>
-    <style>
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
 
-        .post-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            background-color: #fff;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .profile-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 12px;
-        }
-
-        .user-name {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .post-title {
-            font-size: 1.2em;
-            margin-bottom: 8px;
-        }
-
-        .post-body {
-            font-size: 1em;
-            color: #333;
-        }
-
-        .post-image {
-            width: 100%;
-            height: auto;
-            margin-top: 8px;
-            border-radius: 8px;
-            max-width: 300px;
-        }
-
-        .rounded-circle {
-            border-radius: 50%;
-        }
-
-        .follow-btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .follow-btn.following {
-            background-color: #28a745;
-        }
-
-        .profile-header {
-            position: relative;
-        }
-    </style>
-    <h1>投稿一覧</h1>
-    <a href="{{ route('communities.posts.create', $community) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">投稿</a>
-    <div class='posts'>
-        @foreach ($posts as $post)
-            <div class='post-card'>
-                <div class='post-header'>
-                    @if ($post->user)
-                        <a href="{{ route('user.profile', $post->user->id) }}">
-                            <img src="{{ asset('storage/' . $post->user->profile_photo_path) }}" alt="アイコン" class="profile-icon">
-                        </a>
-                        <a href="{{ route('user.profile', $post->user->id) }}" class="user-name">{{ $post->user->name }}</a>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h2 class="text-lg font-semibold">{{ $community->name }}</h2>
+                    <p>{{ $community->description }}</p>
+                    <p>作成日: {{ $community->created_at->format('Y-m-d') }}</p>
+                    <a href="{{ route('communities.members', $community) }}" class="text-blue-500 hover:underline">メンバー一覧</a>
+                    @if($community->users->contains(auth()->user()))
+                        <form action="{{ route('communities.leave', $community) }}" method="POST" onsubmit="return confirm('コミュニティを抜けますか？')">
+                            @csrf
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">退会</button>
+                        </form>
                     @else
-                        <span class="user-name">Unknown User</span>
+                        <script>
+                            alert('参加ボタンを押し、コミュニティに参加してください');
+                            window.location.href = '/communities';
+                        </script>
                     @endif
-                </div>
-                <div class='post-content'>
-                    <h2 class='title'>
-                        <a href="/community_posts/{{ $post->id }}">{{ $post->title }}</a>
-                    </h2>
-                    @if ($post->category)
-                        <a href="/categories/{{ $post->category->id }}">{{ $post->category->name }}</a>
-                    @endif
-                    <p class='body'>{{ $post->body }}</p>
-                    @if ($post->image_url)
-                        <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
-                    @endif
-                    <form action="/community_posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
-                    </form>
                 </div>
             </div>
-        @endforeach
+        </div>
     </div>
-    <div class='paginate'>
-        {{ $posts->links() }}
-    </div>
-    <script>
-        function deletePost(id) {
-            'use strict'
-            if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
-                document.getElementById(`form_${id}`).submit();
-            }
-        }
-    </script>
 </x-app-layout>
