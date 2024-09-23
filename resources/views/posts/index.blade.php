@@ -84,7 +84,7 @@
                 <div class='post-header'>
                     @if ($post->user)
                         <a href="{{ route('user.profile', $post->user->id) }}">
-                            <img src="{{ asset('storage/' . $post->user->profile_photo_path) }}" alt="アイコン" class="profile-icon">
+                            <img src="{{ asset($post->user->profile_photo_path) }}" alt="アイコン" class="profile-icon">
                         </a>
                         <a href="{{ route('user.profile', $post->user->id) }}" class="user-name">{{ $post->user->name }}</a>
                     @else
