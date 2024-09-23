@@ -14,7 +14,7 @@ class CommunityPostController extends Controller
 {
     public function create(Community $community, Category $category)
     {
-        return view('communities.create')->with(['community' => $community, 'categories' => $category->get()]);
+        return view('communities.postcreate')->with(['community' => $community, 'categories' => $category->get()]);
     }
 
     public function store(PostRequest $request, Community $community)
