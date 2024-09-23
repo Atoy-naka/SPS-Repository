@@ -22,6 +22,7 @@ class CommunityController extends Controller
     public function store(Request $request)
     {
         $community = Community::create($request->all());
+        $community->users()->attach(auth()->user()->id, ['role' => 'leader']);
         return redirect()->route('communities.index');
     }
 
