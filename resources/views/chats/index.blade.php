@@ -16,7 +16,7 @@
                         @endphp
                         <div class="mb-4 p-4 border rounded-lg flex items-center justify-between">
                             <div class="flex items-center">
-                                <img src="{{ asset('storage/' . ($chat->owner_id == auth()->id() ? $chat->guest->profile_photo_path : $chat->owner->profile_photo_path)) }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                                <img src="{{ $chat->owner_id == auth()->id() ? $chat->guest->profile_photo_path : $chat->owner->profile_photo_path }}" class="rounded-circle" alt="Profile Photo" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
                                 <div class="flex-grow">
                                     <div class="text-sm text-gray-500">
                                         {{ $chat->owner_id == auth()->id() ? $chat->guest->name : $chat->owner->name }}
@@ -54,4 +54,3 @@
         </div>
     </div>
 </x-app-layout>
-
