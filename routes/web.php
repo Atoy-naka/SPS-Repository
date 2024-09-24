@@ -8,6 +8,8 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\CommunityPostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommunityLikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,6 @@ Route::post('communities/{community}/posts', [CommunityPostController::class, 's
 Route::post('communities/{community}/join', [CommunityController::class, 'join'])->name('communities.join');
 Route::post('communities/{community}/leave', [CommunityController::class, 'leave'])->name('communities.leave');
 Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
-
+Route::post('/post/like', [LikeController::class, 'likePost'])->name('likePost');
 
 require __DIR__.'/auth.php';
