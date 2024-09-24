@@ -30,103 +30,7 @@
         </div>
     </x-slot>
     <style>
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        .post-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            background-color: #fff;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .profile-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 12px;
-        }
-
-        .user-name {
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .post-title {
-            font-size: 1.2em;
-            margin-bottom: 8px;
-        }
-
-        .post-body {
-            font-size: 1em;
-            color: #333;
-        }
-
-        .post-image {
-            width: 100%;
-            height: auto;
-            margin-top: 8px;
-            border-radius: 8px;
-            max-width: 300px;
-        }
-
-        .rounded-circle {
-            border-radius: 50%;
-        }
-
-        .follow-btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .follow-btn.following {
-            background-color: #28a745;
-        }
-
-        .profile-header {
-            position: relative;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            text-align: center;
-            display: inline-block;
-            margin-top: 10px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            font-weight: bold;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .content {
-            margin-top: 20px;
-        }
+        /* 省略 */
     </style>
     <a href="{{ route('communities.posts.create', ['community' => $community->id]) }}" class="btn-primary">投稿</a>
     <div class="content">
@@ -154,6 +58,11 @@
                         @if ($post->image_url)
                             <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
                         @endif
+                        <div class="flexbox">
+                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="community_post"></i>
+                            <p class="count-num">{{ $post->likes->count() }}</p>
+                        </div>
+
                         <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
                             @csrf
                             @method('DELETE')
@@ -174,5 +83,29 @@
                 document.getElementById(`form_${id}`).submit();
             }
         }
+        
+        const likeBtns = document.querySelectorAll('.like-btn');
+        likeBtns.forEach(likeBtn => {
+            likeBtn.addEventListener('click', async (e) => {
+                const clickedEl = e.target;
+                clickedEl.classList.toggle('liked');
+                const postId = e.target.id;
+                const postType = e.target.getAttribute('data-post-type');
+                const res = await fetch('/communities/{communities}/posts/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ post_id: postId, post_type: postType })
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                    clickedEl.nextElementSibling.innerHTML = data.likesCount;
+                })
+                .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
+            });
+        });
     </script>
+
 </x-app-layout>
