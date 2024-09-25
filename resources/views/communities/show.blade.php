@@ -30,7 +30,122 @@
         </div>
     </x-slot>
     <style>
-        /* 省略 */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .post-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: #fff;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .profile-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .post-title {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .post-body {
+            font-size: 1em;
+            color: #333;
+        }
+
+        .post-image {
+            width: 100%;
+            height: auto;
+            margin-top: 8px;
+            border-radius: 8px;
+            max-width: 300px;
+        }
+
+        .rounded-circle {
+            border-radius: 50%;
+        }
+
+        .follow-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .follow-btn.following {
+            background-color: #28a745;
+        }
+
+        .profile-header {
+            position: relative;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            margin-top: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .liked {
+            color: orangered;
+            transition: .2s;
+        }
+
+        .flexbox {
+            align-items: center;
+            display: flex;
+        }
+
+        .count-num {
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        .fa-star {
+            font-size: 30px;
+        }
     </style>
     <a href="{{ route('communities.posts.create', ['community' => $community->id]) }}" class="btn-primary">投稿</a>
     <div class="content">
@@ -59,10 +174,9 @@
                             <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
                         @endif
                         <div class="flexbox">
-                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="community_post"></i>
+                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="{{ $community->id }}"></i>
                             <p class="count-num">{{ $post->likes->count() }}</p>
                         </div>
-
                         <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
                             @csrf
                             @method('DELETE')

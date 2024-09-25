@@ -10,6 +10,7 @@ use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\CommunityPostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommunityLikeController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,4 +94,6 @@ Route::post('communities/{community}/leave', [CommunityController::class, 'leave
 Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
 Route::post('/post/like', [LikeController::class, 'likePost'])->name('likePost');
 
+Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('posts.comments');
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 require __DIR__.'/auth.php';

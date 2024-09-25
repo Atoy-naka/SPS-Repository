@@ -92,8 +92,13 @@
             margin-left: 10px;
         }
 
-        .fa-star {
+        .fa-star, .fa-comment-dots {
             font-size: 30px;
+            cursor: pointer;
+        }
+
+        .comment-btn {
+            margin-left: 20px;
         }
     </style>
     <h1>投稿一覧</h1>
@@ -125,6 +130,10 @@
                 <div class="flexbox">
                     <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}"></i>
                     <p class="count-num">{{ $post->likes->count() }}</p>
+                    <a href="{{ route('posts.comments', $post->id) }}" class="comment-btn">
+                        <i class="fa-regular fa-comment-dots"></i>
+                    </a>
+                    <p class="count-num">{{ $post->comments->count() }}</p>
                 </div>
                 <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
                     @csrf
