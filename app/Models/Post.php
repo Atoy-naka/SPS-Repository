@@ -38,6 +38,11 @@ class Post extends Model
         return $this::with('category')->orderBy('created_at', 'DESC')->paginate($limit_count);
     }
     
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    
     //post_likesテーブルへのリレーションメソッド。Postモデルのインスタンス＄postに、$post->likes->count()とすると記事のいいね数を取得できるようになった。
     public function likes()
     {
