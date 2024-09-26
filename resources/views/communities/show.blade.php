@@ -174,7 +174,7 @@
                             <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
                         @endif
                         <div class="flexbox">
-                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="{{ $community->id }}"></i>
+                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="community_post"></i>
                             <p class="count-num">{{ $post->likes->count() }}</p>
                         </div>
                         <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
@@ -203,23 +203,34 @@
             likeBtn.addEventListener('click', async (e) => {
                 const clickedEl = e.target;
                 clickedEl.classList.toggle('liked');
-                const postId = e.target.id;
-                const postType = e.target.getAttribute('data-post-type');
-                const res = await fetch('/communities/{communities}/posts/like', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ post_id: postId, post_type: postType })
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                    clickedEl.nextElementSibling.innerHTML = data.likesCount;
-                })
-                .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
+                const postId = clickedEl.id;
+                const postType = clickedEl.getAttribute('data-post-type');
+                
+                try {
+                    const res = await fetch(`/communities/{{ $community->id }}/posts/like`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ post_id: postId, post_type: postType })
+                    });
+        
+                    if (!res.ok) throw new Error('Network response was not ok');
+        
+                    const data = await res.json();
+        
+                    // いいね数を更新する処理
+                    const likeCountElement = clickedEl.nextElementSibling;
+                    likeCountElement.innerHTML = data.likesCount;
+        
+                } catch (error) {
+                    alert('処理が失敗しました。通信環境の良い場所で再度お試しください。');
+                    console.error('Error:', error);
+                }
             });
         });
+
     </script>
 
 </x-app-layout>
