@@ -93,6 +93,7 @@ Route::post('communities/{community}/join', [CommunityController::class, 'join']
 Route::post('communities/{community}/leave', [CommunityController::class, 'leave'])->name('communities.leave');
 Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
 Route::post('/post/like', [LikeController::class, 'likePost'])->name('likePost');
+Route::post('communities/{community}/post/like', [CommunityController::class, 'likePost']);
 
 Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('posts.comments');
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
