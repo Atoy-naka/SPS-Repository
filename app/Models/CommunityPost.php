@@ -34,7 +34,7 @@ class CommunityPost extends Model
     
     public function communitypost_likes()
     {
-        return $this->hasMany(CommunityPostLike::class, 'community_post_id');
+        return $this->hasMany(User::class, 'communitypost_likes');
     }
     
     public function communityComments()
