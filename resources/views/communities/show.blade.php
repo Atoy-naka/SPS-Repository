@@ -56,7 +56,7 @@
                             <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
                         @endif
                         <div class="flexbox">
-                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}"></i>
+                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="community_post"></i>
                             <p class="count-num">{{ $post->likes->count() }}</p>
                             <a href="{{ route('communities.posts.comments', [$community->id, $post->id]) }}" class="comment-btn">
                                 <i class="fa-regular fa-comment-dots"></i>
@@ -77,6 +77,7 @@
         </div>
     </div>
     <script>
+        const communityId = '{{ $community->id }}';
         function deletePost(id) {
             'use strict'
             if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
@@ -93,7 +94,7 @@
                 const postType = clickedEl.getAttribute('data-post-type');
                 
                 try {
-                    const res = await fetch(`/communities/{{ $community->id }}/posts/like`, {
+                    const res = await fetch(`/communities/${communityId}/post/like`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
