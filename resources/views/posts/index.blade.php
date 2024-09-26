@@ -57,26 +57,6 @@
             border-radius: 50%;
         }
 
-        .follow-btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .follow-btn.following {
-            background-color: #28a745;
-        }
-
-        .profile-header {
-            position: relative;
-        }
-
         .liked {
             color: orangered;
             transition: .2s;
@@ -120,6 +100,7 @@
         }
     </style>
     <h1>投稿一覧</h1>
+    <button id="toggle-feed-btn" class="fixed-btn">フォロー中ユーザーの投稿のみを表示</button>
     <a href='/posts/create' class="fixed-btn">+</a>
     <div class='posts'>
         @foreach ($posts as $post)
@@ -193,6 +174,26 @@
                 })
                 .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
             });
+        });
+
+        const toggleFeedBtn = document.getElementById('toggle-feed-btn');
+        let showingAllPosts = true;
+
+        toggleFeedBtn.addEventListener('click', async () => {
+            showingAllPosts = !showingAllPosts;
+            const res = await fetch(showingAllPosts ? '/posts' : '/feed', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then((res) => res.text())
+            .then((data) => {
+                document.querySelector('.posts').innerHTML = data;
+                toggleFeedBtn.textContent = showingAllPosts ? 'フォロー中ユーザーの投稿のみを表示' : 'すべての投稿を表示';
+            })
+            .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
         });
     </script>
 </x-app-layout>
