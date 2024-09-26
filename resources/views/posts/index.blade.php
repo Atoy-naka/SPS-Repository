@@ -100,9 +100,27 @@
         .comment-btn {
             margin-left: 20px;
         }
+
+        .fixed-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
     <h1>投稿一覧</h1>
-    <a href='/posts/create'>[投稿]</a>
+    <a href='/posts/create' class="fixed-btn">+</a>
     <div class='posts'>
         @foreach ($posts as $post)
         <div class='post-card'>
