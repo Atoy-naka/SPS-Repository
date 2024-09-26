@@ -29,6 +29,95 @@
             @endif
         </div>
     </x-slot>
+    <a href="{{ route('communities.posts.create', ['community' => $community->id]) }}" class="btn-primary">投稿</a>
+    <div class="content">
+        <div class='posts'>
+            @foreach ($posts->sortByDesc('created_at') as $post)
+                <div class='post-card'>
+                    <div class='post-header'>
+                        @if ($post->user)
+                            <a href="{{ route('user.profile', $post->user->id) }}">
+                                <img src="{{ asset($post->user->profile_photo_path) }}" alt="アイコン" class="profile-icon">
+                            </a>
+                            <a href="{{ route('user.profile', $post->user->id) }}" class="user-name">{{ $post->user->name }}</a>
+                        @else
+                            <span class="user-name">Unknown User</span>
+                        @endif
+                    </div>
+                    <div class='post-content'>
+                        <h2 class='title'>
+                            <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
+                        </h2>
+                        @if ($post->category)
+                            <a href="/categories/{{ $post->category->id }}">{{ $post->category->name }}</a>
+                        @endif
+                        <p class='body'>{{ $post->body }}</p>
+                        @if ($post->image_url)
+                            <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
+                        @endif
+                        <div class="flexbox">
+                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}"></i>
+                            <p class="count-num">{{ $post->likes->count() }}</p>
+                            <a href="{{ route('communities.posts.comments', [$community->id, $post->id]) }}" class="comment-btn">
+                                <i class="fa-regular fa-comment-dots"></i>
+                            </a>
+                            <p class="count-num">{{ $post->communityComments ? $post->communityComments->count() : 0 }}</p>
+                        </div>
+                        <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <div class='paginate'>
+            {{ $posts->links() }}
+        </div>
+    </div>
+    <script>
+        function deletePost(id) {
+            'use strict'
+            if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                document.getElementById(`form_${id}`).submit();
+            }
+        }
+        
+        const likeBtns = document.querySelectorAll('.like-btn');
+        likeBtns.forEach(likeBtn => {
+            likeBtn.addEventListener('click', async (e) => {
+                const clickedEl = e.target;
+                clickedEl.classList.toggle('liked');
+                const postId = clickedEl.id;
+                const postType = clickedEl.getAttribute('data-post-type');
+                
+                try {
+                    const res = await fetch(`/communities/{{ $community->id }}/posts/like`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ post_id: postId, post_type: postType })
+                    });
+        
+                    if (!res.ok) throw new Error('Network response was not ok');
+        
+                    const data = await res.json();
+        
+                    // いいね数を更新する処理
+                    const likeCountElement = clickedEl.nextElementSibling;
+                    likeCountElement.innerHTML = data.likesCount;
+        
+                } catch (error) {
+                    alert('処理が失敗しました。通信環境の良い場所で再度お試しください。');
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+    </script>
     <style>
         .container {
             width: 80%;
@@ -143,94 +232,13 @@
             margin-left: 10px;
         }
 
-        .fa-star {
+        .fa-star, .fa-comment-dots {
             font-size: 30px;
+            cursor: pointer;
+        }
+
+        .fa-comment-dots {
+            margin-left: 20px; /* いいねボタンとの間隔を開ける */
         }
     </style>
-    <a href="{{ route('communities.posts.create', ['community' => $community->id]) }}" class="btn-primary">投稿</a>
-    <div class="content">
-        <div class='posts'>
-            @foreach ($posts->sortByDesc('created_at') as $post)
-                <div class='post-card'>
-                    <div class='post-header'>
-                        @if ($post->user)
-                            <a href="{{ route('user.profile', $post->user->id) }}">
-                                <img src="{{ asset($post->user->profile_photo_path) }}" alt="アイコン" class="profile-icon">
-                            </a>
-                            <a href="{{ route('user.profile', $post->user->id) }}" class="user-name">{{ $post->user->name }}</a>
-                        @else
-                            <span class="user-name">Unknown User</span>
-                        @endif
-                    </div>
-                    <div class='post-content'>
-                        <h2 class='title'>
-                            <a href="/posts/{{ $post->id }}">{{ $post->title }}</a>
-                        </h2>
-                        @if ($post->category)
-                            <a href="/categories/{{ $post->category->id }}">{{ $post->category->name }}</a>
-                        @endif
-                        <p class='body'>{{ $post->body }}</p>
-                        @if ($post->image_url)
-                            <img src="{{ $post->image_url }}" alt="投稿画像" class="post-image">
-                        @endif
-                        <div class="flexbox">
-                            <i class="fa-solid fa-star like-btn {{ $post->isLikedByAuthUser() ? 'liked' : '' }}" id="{{ $post->id }}" data-post-type="community_post"></i>
-                            <p class="count-num">{{ $post->likes->count() }}</p>
-                        </div>
-                        <form action="/posts/{{ $post->id }}" id="form_{{ $post->id }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" onclick="deletePost({{ $post->id }})">削除</button>
-                        </form>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        <div class='paginate'>
-            {{ $posts->links() }}
-        </div>
-    </div>
-    <script>
-        function deletePost(id) {
-            'use strict'
-            if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
-                document.getElementById(`form_${id}`).submit();
-            }
-        }
-        
-        const likeBtns = document.querySelectorAll('.like-btn');
-        likeBtns.forEach(likeBtn => {
-            likeBtn.addEventListener('click', async (e) => {
-                const clickedEl = e.target;
-                clickedEl.classList.toggle('liked');
-                const postId = clickedEl.id;
-                const postType = clickedEl.getAttribute('data-post-type');
-                
-                try {
-                    const res = await fetch(`/communities/{{ $community->id }}/posts/like`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ post_id: postId, post_type: postType })
-                    });
-        
-                    if (!res.ok) throw new Error('Network response was not ok');
-        
-                    const data = await res.json();
-        
-                    // いいね数を更新する処理
-                    const likeCountElement = clickedEl.nextElementSibling;
-                    likeCountElement.innerHTML = data.likesCount;
-        
-                } catch (error) {
-                    alert('処理が失敗しました。通信環境の良い場所で再度お試しください。');
-                    console.error('Error:', error);
-                }
-            });
-        });
-
-    </script>
-
 </x-app-layout>

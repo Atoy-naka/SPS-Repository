@@ -36,6 +36,11 @@ class CommunityPost extends Model
     {
         return $this->hasMany(CommunityPostLike::class, 'community_post_id');
     }
+    
+    public function communityComments()
+    {
+        return $this->hasMany(CommunityComment::class);
+    }
 
     public function isLikedByAuthUser() :bool
     {
