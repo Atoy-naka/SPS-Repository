@@ -83,4 +83,10 @@ class User extends Authenticatable
         return $this->hasMany(CommunityPost::class, 'communitypost_likes');
     }
     
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    
 }
