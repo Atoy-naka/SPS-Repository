@@ -46,7 +46,7 @@ class Post extends Model
     //post_likesテーブルへのリレーションメソッド。Postモデルのインスタンス＄postに、$post->likes->count()とすると記事のいいね数を取得できるようになった。
     public function likes()
     {
-        return $this->hasMany(PostLike::class);
+        return $this->hasMany(PostLike::class, 'post_id');;
     }
     //自身がいいねしているのかどうか判定するメソッド（しているならtrue,していないならfalseを返す）
     public function isLikedByAuthUser() :bool
