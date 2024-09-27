@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CommunityPostLike;
 
 class CommunityPost extends Model
 {
@@ -29,7 +30,7 @@ class CommunityPost extends Model
 
     public function likes()
     {
-        return $this->hasMany(PostLike::class, 'post_id');
+        return $this->hasMany(CommunityPostLike::class, 'community_posts_id');
     }
     
     public function communitypost_likes()
@@ -51,6 +52,11 @@ class CommunityPost extends Model
             array_push($likersArr, $postLike->user_id);
         }
 
-        return in_array($authUserId, $likersArr);
+        if (in_array($authUserId,$likersArr)){
+            //存在したらいいねをしていることになるため、trueを返す
+            return true;
+        }else{
+            return false;
+        }
     }
 }
