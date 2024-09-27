@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\CommunityPost;
 use App\Models\PostLike;
 use Illuminate\Http\Request;
 
@@ -13,13 +12,8 @@ class LikeController extends Controller
     {
         $user_id = \Auth::id();
         $post_id = $request->post_id;
-        $post_type = $request->post_type; // 'post' or 'community_post'
 
-        if ($post_type === 'post') {
-            $post = Post::find($post_id);
-        } else {
-            $post = CommunityPost::find($post_id);
-        }
+        $post = Post::find($post_id);
 
         $alreadyLiked = PostLike::where('user_id', $user_id)->where('post_id', $post_id)->first();
 
