@@ -91,7 +91,8 @@
                 const clickedEl = e.target;
                 clickedEl.classList.toggle('liked');
                 const postId = clickedEl.id;
-                const postType = clickedEl.getAttribute('data-post-type');
+                console.log(postId);
+
                 
                 try {
                     const res = await fetch(`/communities/${communityId}/post/like`, {
@@ -100,17 +101,16 @@
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ post_id: postId, post_type: postType })
-                    });
+                        body: JSON.stringify({ post_id: postId})
+                    })
         
-                    if (!res.ok) throw new Error('Network response was not ok');
         
-                    const data = await res.json();
-        
-                    // いいね数を更新する処理
-                    const likeCountElement = clickedEl.nextElementSibling;
-                    likeCountElement.innerHTML = data.likesCount;
-        
+                    .then((res)=>res.json())
+                    
+                    .then((data)=>{
+                        //記事のいいね数がバックエンドからlikesCountという変数に格納されて送信されるため、それを受け取りビューに反映します。
+                        clickedEl.nextElementSibling.innerHTML = data.likesCount;
+                    })
                 } catch (error) {
                     alert('処理が失敗しました。通信環境の良い場所で再度お試しください。');
                     console.error('Error:', error);
