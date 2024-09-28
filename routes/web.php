@@ -44,6 +44,9 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
     Route::get('/posts/search/{post}', 'searchshow')->name('searchshow');
 });
 
+Route::get('/following-posts', [PostController::class, 'followingPosts'])->name('following.posts');
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profileoption')->middleware("auth");
 
