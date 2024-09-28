@@ -1,7 +1,10 @@
 <x-app-layout>
     <script src="https://kit.fontawesome.com/ee97774e40.js" crossorigin="anonymous"></script>
     <x-slot name="header">
-        HOME
+        <div class="flex justify-between items-center">
+            <span>HOME</span>
+            <button id="toggle-feed-btn" class="bg-blue-500 text-white px-4 py-2 rounded">フォロー中ユーザーの投稿のみを表示</button>
+        </div>
     </x-slot>
     <style>
         .container {
@@ -99,8 +102,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
-    <h1>投稿一覧</h1>
-    <button id="toggle-feed-btn" class="fixed-btn">フォロー中ユーザーの投稿のみを表示</button>
+    <h1 class="text-2xl font-bold mb-4">投稿一覧</h1>
     <a href='/posts/create' class="fixed-btn">+</a>
     <div class='posts'>
         @foreach ($posts as $post)
@@ -181,7 +183,7 @@
 
         toggleFeedBtn.addEventListener('click', async () => {
             showingAllPosts = !showingAllPosts;
-            const res = await fetch(showingAllPosts ? '/posts' : '/feed', {
+            const res = await fetch(showingAllPosts ? '/posts' : '/following-posts', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -190,7 +192,10 @@
             })
             .then((res) => res.text())
             .then((data) => {
-                document.querySelector('.posts').innerHTML = data;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const newPosts = doc.querySelector('.posts').innerHTML;
+                document.querySelector('.posts').innerHTML = newPosts;
                 toggleFeedBtn.textContent = showingAllPosts ? 'フォロー中ユーザーの投稿のみを表示' : 'すべての投稿を表示';
             })
             .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));

@@ -77,4 +77,13 @@ class PostController extends Controller
     {
         return view('searches.searchshow')->with(['post' => $post]);
     }
+    
+    public function followingPosts()
+    {
+        $user = Auth::user();
+        $followingIds = $user->following()->pluck('followee_user_id');
+        $posts = Post::whereIn('user_id', $followingIds)->orderBy('created_at', 'desc')->paginate(10);
+        return view('posts.index')->with(['posts' => $posts]);
+    }
+
 }
