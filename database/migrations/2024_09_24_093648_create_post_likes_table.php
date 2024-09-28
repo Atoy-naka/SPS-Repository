@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('post_likes', function (Blueprint $table) {
+            $table->id();
             //いいねしたユーザーのid
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             //いいねされた記事のid
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             //主キーをuser_idとpost_idの組み合わせにする
-            $table->primary(['user_id','post_id']);
             $table->timestamps();
         });
     }
