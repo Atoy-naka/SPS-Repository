@@ -16,12 +16,14 @@ class ProfileController extends Controller
     
     public function show(User $user)
     {
+        $user->load('posts');
         return view('profiles.profileshow', [
             'user' => $user,
             'followersCount' => $user->followers_count,
             'followingCount' => $user->following_count,
         ]);
     }
+
     
     /**
      * Display the user's profile form.
