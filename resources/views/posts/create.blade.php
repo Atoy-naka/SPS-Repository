@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        　POST
+        <div style="margin-bottom: 20px;">POST</div>
     </x-slot>
 <!DOCTYPE html>
 <html lang="ja">
@@ -10,10 +10,14 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
             body {
                 font-family: 'Nunito', sans-serif;
                 background-color: #f8fafc;
-                margin: 0;
                 padding: 20px;
             }
             h1 {
@@ -26,7 +30,7 @@
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 max-width: 600px;
-                margin: 0 auto;
+                margin: 20px auto;
             }
             .category, .title, .body, .image {
                 margin-bottom: 20px;
@@ -80,7 +84,6 @@
         </style>
     </head>
     <body>
-        <h1>Post</h1>
         <form action="/posts" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="category">
