@@ -20,6 +20,22 @@
                             <li>{{ $user->name }} @if($user->pivot->role == 'leader') (リーダー) @endif</li>
                         @endforeach
                     </ul>
+                    @if (auth()->user()->pivot->role == 'leader')
+                        <form action="{{ route('communities.leave', $community) }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="new_leader_id">新しいリーダーを選択</label>
+                                <select name="new_leader_id" id="new_leader_id" required>
+                                    @foreach ($community->users as $user)
+                                        @if ($user->id != auth()->user()->id)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">退会</button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CommunityPost;
 use App\Models\Community;
+use App\Models\User;
 
 class CommunityController extends Controller
 {
@@ -26,7 +27,6 @@ class CommunityController extends Controller
         return redirect()->route('communities.index');
     }
 
-
     public function show(Community $community)
     {
         $posts = $community->communityPosts()->paginate(10);
@@ -44,11 +44,18 @@ class CommunityController extends Controller
         return redirect()->route('communities.show', $community);
     }
     
-    public function leave(Community $community)
+    public function leave(Community $community, Request $request)
     {
-        $community->users()->detach(auth()->user()->id);
+        $user = auth()->user();
+        if ($community->users()->where('user_id', $user->id)->where('role', 'leader')->exists()) {
+            $newLeaderId = $request->input('new_leader_id');
+            if ($newLeaderId) {
+                $community->users()->updateExistingPivot($newLeaderId, ['role' => 'leader']);
+            } else {
+                return redirect()->back()->withErrors(['new_leader_id' => '新しいリーダーを指名してください。']);
+            }
+        }
+        $community->users()->detach($user->id);
         return redirect()->route('communities.index');
     }
-
-
 }
