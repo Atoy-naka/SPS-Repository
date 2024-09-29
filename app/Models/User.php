@@ -72,21 +72,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Community::class, 'community_user', 'user_id', 'community_id');
     }
-    
-    public function likes()
-    {
-        return $this->hasMany(PostLike::class);
-    }
-    
-    public function communitypost_likes()
-    {
-        return $this->hasMany(CommunityPost::class, 'communitypost_likes');
-    }
-    
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
 
-    
 }

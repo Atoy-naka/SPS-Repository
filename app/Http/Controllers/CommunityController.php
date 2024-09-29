@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CommunityPost;
 use App\Models\Community;
+use App\Models\User;
 
 class CommunityController extends Controller
 {
@@ -26,7 +27,6 @@ class CommunityController extends Controller
         return redirect()->route('communities.index');
     }
 
-
     public function show(Community $community)
     {
         $posts = $community->communityPosts()->paginate(10);
@@ -44,39 +44,24 @@ class CommunityController extends Controller
         return redirect()->route('communities.show', $community);
     }
     
-    public function leave(Community $community)
+    public function leave(Community $community, Request $request)
     {
-        $community->users()->detach(auth()->user()->id);
+        $user = auth()->user();
+        $pivot = $community->users()->where('user_id', $user->id)->first()->pivot;
+        if ($pivot && $pivot->role == 'leader') {
+            $newLeaderId = $request->input('new_leader_id');
+            if ($newLeaderId) {
+                $community->users()->updateExistingPivot($newLeaderId, ['role' => 'leader']);
+            } else {
+                return redirect()->route('communities.selectNewLeader', $community);
+            }
+        }
+        $community->users()->detach($user->id);
         return redirect()->route('communities.index');
     }
-    
-    public function likePost(Request $request)
+
+    public function selectNewLeader(Community $community)
     {
-        $user_id = \Auth::id();
-        $post_id = $request->post_id;
-        $post_type = $request->post_type; // 'post' or 'community_post'
-
-        if ($post_type === 'post') {
-            $post = Post::find($post_id);
-        } else {
-            $post = CommunityPost::find($post_id);
-        }
-
-        $alreadyLiked = PostLike::where('user_id', $user_id)->where('post_id', $post_id)->first();
-
-        if (!$alreadyLiked) {
-            $like = new PostLike();
-            $like->post_id = $post_id;
-            $like->user_id = $user_id;
-            $like->save();
-        } else {
-            PostLike::where('post_id', $post_id)->where('user_id', $user_id)->delete();
-        }
-
-        $likesCount = $post->likes->count();
-
-        return response()->json(['likesCount' => $likesCount]);
+        return view('communities.selectNewLeader', compact('community'));
     }
-
-
 }
