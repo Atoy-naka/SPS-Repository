@@ -155,32 +155,36 @@
                 document.getElementById(`form_${id}`).submit();
             }
         }
-
-        const likeBtns = document.querySelectorAll('.like-btn');
-        likeBtns.forEach(likeBtn => {
-            likeBtn.addEventListener('click', async (e) => {
-                const clickedEl = e.target;
-                clickedEl.classList.toggle('liked');
-                const postId = e.target.id;
-                const res = await fetch('/post/like', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ post_id: postId })
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                    clickedEl.nextElementSibling.innerHTML = data.likesCount;
-                })
-                .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
+    
+        function setLikeButtonListeners() {
+            const likeBtns = document.querySelectorAll('.like-btn');
+            likeBtns.forEach(likeBtn => {
+                likeBtn.addEventListener('click', async (e) => {
+                    const clickedEl = e.target;
+                    clickedEl.classList.toggle('liked');
+                    const postId = e.target.id;
+                    const res = await fetch('/post/like', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ post_id: postId })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        clickedEl.nextElementSibling.innerHTML = data.likesCount;
+                    })
+                    .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
+                });
             });
-        });
-
+        }
+    
+        setLikeButtonListeners();
+    
         const toggleFeedBtn = document.getElementById('toggle-feed-btn');
         let showingAllPosts = true;
-
+    
         toggleFeedBtn.addEventListener('click', async () => {
             showingAllPosts = !showingAllPosts;
             const res = await fetch(showingAllPosts ? '/posts' : '/following-posts', {
@@ -197,8 +201,10 @@
                 const newPosts = doc.querySelector('.posts').innerHTML;
                 document.querySelector('.posts').innerHTML = newPosts;
                 toggleFeedBtn.textContent = showingAllPosts ? 'フォロー中ユーザーの投稿のみを表示' : 'すべての投稿を表示';
+                setLikeButtonListeners(); // 新しい投稿に対していいねボタンのイベントリスナーを再設定
             })
             .catch(() => alert('処理が失敗しました。画面を再読み込みし、通信環境の良い場所で再度お試しください。'));
         });
     </script>
+
 </x-app-layout>
