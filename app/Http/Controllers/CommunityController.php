@@ -47,15 +47,21 @@ class CommunityController extends Controller
     public function leave(Community $community, Request $request)
     {
         $user = auth()->user();
-        if ($community->users()->where('user_id', $user->id)->where('role', 'leader')->exists()) {
+        $pivot = $community->users()->where('user_id', $user->id)->first()->pivot;
+        if ($pivot && $pivot->role == 'leader') {
             $newLeaderId = $request->input('new_leader_id');
             if ($newLeaderId) {
                 $community->users()->updateExistingPivot($newLeaderId, ['role' => 'leader']);
             } else {
-                return redirect()->back()->withErrors(['new_leader_id' => '新しいリーダーを指名してください。']);
+                return redirect()->route('communities.selectNewLeader', $community);
             }
         }
         $community->users()->detach($user->id);
         return redirect()->route('communities.index');
+    }
+
+    public function selectNewLeader(Community $community)
+    {
+        return view('communities.selectNewLeader', compact('community'));
     }
 }

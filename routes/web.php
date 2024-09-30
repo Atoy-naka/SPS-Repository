@@ -8,6 +8,10 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\CommunityPostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommunityLikeController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommunityCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +43,9 @@ Route::controller(PostController::class)->middleware(['auth'])->group(function()
     Route::get('/search', 'search')->name('search');
     Route::get('/posts/search/{post}', 'searchshow')->name('searchshow');
 });
+
+Route::get('/following-posts', [PostController::class, 'followingPosts'])->name('following.posts');
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
 Route::get('/categories/{category}', [CategoryController::class,'index'])->middleware("auth");
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profileoption')->middleware("auth");
@@ -88,7 +95,13 @@ Route::get('communities/{community}/posts/create', [CommunityPostController::cla
 Route::post('communities/{community}/posts', [CommunityPostController::class, 'store'])->name('communities.posts.store');
 Route::post('communities/{community}/join', [CommunityController::class, 'join'])->name('communities.join');
 Route::post('communities/{community}/leave', [CommunityController::class, 'leave'])->name('communities.leave');
+Route::get('/communities/{community}/select-new-leader', [CommunityController::class, 'selectNewLeader'])->name('communities.selectNewLeader');
 Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
+Route::post('/post/like', [LikeController::class, 'likePost'])->name('likePost');
+Route::post('communities/{community}/post/like', [CommunityLikeController::class, 'likePost'])->name('community.likePost');
 
-
+Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('posts.comments');
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::get('communities/{community}/posts/{post}/comments', [CommunityPostController::class, 'comments'])->name('communities.posts.comments');
+Route::post('communities/{community}/posts/{post}/comments', [CommunityCommentController::class, 'store'])->name('communities.posts.comments.store');
 require __DIR__.'/auth.php';

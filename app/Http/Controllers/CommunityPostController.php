@@ -31,4 +31,16 @@ class CommunityPostController extends Controller
         $post->fill($input)->save();
         return redirect()->route('communities.show', $community);
     }
+    
+    public function show($communityId, $postId)
+    {
+        $post = CommunityPost::with('communityComments.user')->findOrFail($postId);
+        return view('communities.show', compact('post'));
+    }
+    
+    public function comments($communityId, $postId)
+    {
+        $post = CommunityPost::with('communityComments.user')->findOrFail($postId);
+        return view('communities.comments', compact('post'));
+    }
 }
