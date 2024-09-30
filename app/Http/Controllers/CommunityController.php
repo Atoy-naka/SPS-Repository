@@ -49,11 +49,15 @@ class CommunityController extends Controller
         $user = auth()->user();
         $pivot = $community->users()->where('user_id', $user->id)->first()->pivot;
         if ($pivot && $pivot->role == 'leader') {
-            $newLeaderId = $request->input('new_leader_id');
-            if ($newLeaderId) {
-                $community->users()->updateExistingPivot($newLeaderId, ['role' => 'leader']);
+            if ($community->users()->count() == 1) {
+                return redirect()->route('communities.confirmDelete', $community);
             } else {
-                return redirect()->route('communities.selectNewLeader', $community);
+                $newLeaderId = $request->input('new_leader_id');
+                if ($newLeaderId) {
+                    $community->users()->updateExistingPivot($newLeaderId, ['role' => 'leader']);
+                } else {
+                    return redirect()->route('communities.selectNewLeader', $community);
+                }
             }
         }
         $community->users()->detach($user->id);
@@ -63,5 +67,16 @@ class CommunityController extends Controller
     public function selectNewLeader(Community $community)
     {
         return view('communities.selectNewLeader', compact('community'));
+    }
+
+    public function confirmDelete(Community $community)
+    {
+        return view('communities.confirmDelete', compact('community'));
+    }
+
+    public function delete(Community $community)
+    {
+        $community->delete();
+        return redirect()->route('communities.index')->with('status', 'コミュニティが削除されました。');
     }
 }

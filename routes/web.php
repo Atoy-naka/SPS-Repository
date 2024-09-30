@@ -97,6 +97,8 @@ Route::post('communities/{community}/join', [CommunityController::class, 'join']
 Route::post('communities/{community}/leave', [CommunityController::class, 'leave'])->name('communities.leave');
 Route::get('/communities/{community}/select-new-leader', [CommunityController::class, 'selectNewLeader'])->name('communities.selectNewLeader');
 Route::get('communities/{community}/members', [CommunityController::class, 'members'])->name('communities.members');
+Route::get('/communities/{community}/confirm-delete', [CommunityController::class, 'confirmDelete'])->name('communities.confirmDelete');
+Route::post('/communities/{community}/delete', [CommunityController::class, 'delete'])->name('communities.delete');
 Route::post('/post/like', [LikeController::class, 'likePost'])->name('likePost');
 Route::post('communities/{community}/post/like', [CommunityLikeController::class, 'likePost'])->name('community.likePost');
 
