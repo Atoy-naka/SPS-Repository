@@ -102,7 +102,6 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
-    <h1 class="text-2xl font-bold mb-4">投稿一覧</h1>
     <a href='/posts/create' class="fixed-btn">+</a>
     <div class='posts'>
         @foreach ($posts as $post)

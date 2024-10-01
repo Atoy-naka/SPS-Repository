@@ -17,7 +17,7 @@
                     @foreach ($communities as $community)
                         <div class="mb-4">
                             <h2 class="text-lg font-semibold">{{ $community->name }}</h2>
-                            <p>{{ $community->description }}</p>
+                            <p>{{ $community->Sdescription }}</p>
                             <p>作成日: {{ $community->created_at->format('Y-m-d') }}</p>
                             <a href="{{ route('communities.show', $community) }}" class="text-blue-500 hover:underline">View Community</a>
                             @if(!$community->users->contains(auth()->user()))
