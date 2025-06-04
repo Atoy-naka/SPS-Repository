@@ -77,6 +77,12 @@ SPSは、ペット好きなユーザー同士が日常の写真・エピソー�
 ポストのプレビュー画面
 ![スクリーンショット 2024-09-21 161729](https://github.com/user-attachments/assets/7aafaffb-ea3c-4a05-a388-1478f44c1249)
 
+プロフィール画面とユーザーの投稿したポスト一覧
+![Image (2)](https://github.com/user-attachments/assets/865c7db5-cbd8-4089-84c0-0b07fe8a036b)
+
+プロフィール編集画面
+![スクリーンショット 2025-06-04 124321](https://github.com/user-attachments/assets/d83707f8-db5b-42ec-9bea-08efb1e38e08)
+
 ユーザー間でのチャット画面
 ![スクリーンショット 2025-06-04 113936](https://github.com/user-attachments/assets/7e5d6cc2-9103-4bee-9116-c80f5c7e4b22)
 
